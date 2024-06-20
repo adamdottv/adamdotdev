@@ -49,7 +49,7 @@ export default async function LandingPage() {
           <div className="absolute inset-0 bg-black/25" />
         </div>
       </div>
-      <div className="pointer-events-none fixed inset-0 flex flex-col items-center justify-center text-center text-white">
+      <div className="pointer-events-none fixed inset-0 flex flex-col items-center justify-center px-5 text-center text-white">
         <div className="absolute inset-0 -z-10 bg-black/75 text-white text-opacity-[15%]">
           <svg
             viewBox="0 0 1920 1080"
@@ -69,7 +69,7 @@ export default async function LandingPage() {
             <path d="M1920 100L-4.76837e-06 99.9999" stroke="currentColor" />
           </svg>
         </div>
-        <div className="flex flex-col items-center justify-center gap-10 p-5">
+        <div className="flex flex-col items-center justify-center gap-10">
           <Image
             src={AdamAvatar}
             alt="Adam's face"

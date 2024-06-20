@@ -20,6 +20,8 @@ class TwitchController {
 
     await this.setupEventSub();
     await this.setupChatBot();
+
+    console.log("Twitch setup complete!");
   }
 
   async setupEventSub() {
@@ -61,6 +63,7 @@ class TwitchController {
     this.chatClient.connect();
 
     this.chatClient.onMessage(async (channel, user, message, msg) => {
+      console.log("message", message);
       bus.publish(Resource.Bus, Twitch.Events.ChatMessage, {
         channel,
         user,
