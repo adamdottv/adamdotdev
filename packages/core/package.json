@@ -1,0 +1,41 @@
+{
+  "name": "@adamdotdev/core",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db": "sst shell drizzle-kit",
+    "db:exec": "sst shell ../scripts/src/psql",
+    "db:reset": "sst shell ../scripts/src/db-reset"
+  },
+  "devDependencies": {
+    "@neondatabase/serverless": "^0.9.3",
+    "@types/luxon": "3.4.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.588.0",
+    "@aws-sdk/client-rds-data": "3.577.0",
+    "@aws-sdk/client-s3": "^3.583.0",
+    "@aws-sdk/client-sesv2": "^3.577.0",
+    "@aws-sdk/client-secrets-manager": "^3.598.0",
+    "@aws-sdk/credential-providers": "3.577.0",
+    "@aws-sdk/s3-request-presigner": "^3.583.0",
+    "@hono/zod-openapi": "0.11.0",
+    "@twurple/api": "^7.0.3",
+    "@twurple/auth": "^7.0.3",
+    "@twurple/chat": "^7.0.3",
+    "@twurple/eventsub-ws": "^7.0.3",
+    "drizzle-kit": "0.21.1",
+    "drizzle-orm": "0.30.10",
+    "hono": "4.0.1",
+    "luxon": "3.4.4",
+    "nanoid": "5.0.7",
+    "remeda": "1.61.0",
+    "stripe": "15.2.0",
+    "zod": "3.23.8"
+  }
+}
