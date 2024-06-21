@@ -10,7 +10,7 @@ export default async function OfficeBackground() {
         <source src="media/office-b-roll-720p.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="absolute inset-0 -z-10 bg-black/85 text-white text-opacity-[15%]">
+      <div className="absolute inset-0 -z-10 bg-black/75 text-white text-opacity-[15%]">
         <svg
           viewBox="0 0 1920 1080"
           fill="none"

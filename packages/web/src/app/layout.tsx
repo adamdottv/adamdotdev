@@ -72,7 +72,7 @@ export default function RootLayout({
       )}
     >
       <Fathom />
-      <body>{children}</body>
+      <body className="h-full w-full overflow-y-hidden">{children}</body>
     </html>
   );
 }

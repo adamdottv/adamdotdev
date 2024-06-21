@@ -33,7 +33,7 @@ export default async function TerminalBackground() {
         <source srcSet={terminal400} />
         <img {...rest} className="h-auto w-full" />
       </picture>
-      <div className="absolute inset-0 bg-black/85" />
+      <div className="absolute inset-0 bg-black/80" />
     </div>
   );
 }
