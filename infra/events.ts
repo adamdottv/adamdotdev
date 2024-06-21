@@ -11,4 +11,5 @@ bus.subscribe({
     secret.Twitch.ClientSecret,
     secret.Twitch.Tokens,
   ],
+  permissions: [{ actions: ["iot:*"], resources: ["*"] }],
 });

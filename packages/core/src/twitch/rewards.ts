@@ -47,7 +47,7 @@ export module Rewards {
         },
       );
     } catch (error) {
-      console.error("failed to enable reward " + id);
+      console.error("failed to disable reward " + id);
       console.error(error);
     }
   });

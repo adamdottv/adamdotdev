@@ -1,12 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -15,6 +10,7 @@ const config = {
         proaws: "#F28F5A",
         tomorrow: "#EBFF63",
         crimson: "#F76190",
+        recording: "#FF6363",
         lime: "#C4F042",
         mint: "#25D0AB",
         purple: "#8e4ec6",

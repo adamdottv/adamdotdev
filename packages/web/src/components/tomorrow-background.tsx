@@ -33,6 +33,7 @@ export default async function TomorrowBackground() {
         <source srcSet={tomorrow400} />
         <img {...rest} className="h-auto w-full" />
       </picture>
+      <div className="absolute inset-0 bg-black/90" />
     </div>
   );
 }

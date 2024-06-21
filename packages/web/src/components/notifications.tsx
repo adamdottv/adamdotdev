@@ -21,21 +21,34 @@ export default function Notifications({
   endpoint: string;
   authorizer: string;
 }) {
-  const [_, setNotifications, notifications, previous] = useQueue<TwitchEvent>({
+  const [_, setNotifications, notifications, previous] = useQueue<
+    TwitchEvent & { key: string }
+  >({
     count: MAX_NOTIFICATIONS,
     timeout: NOTIFICATION_DURATION * 1000,
   });
 
   const handleTwitchEvent = (twitchEvent: TwitchEvent) => {
+    const validTypes: TwitchEvent["type"][] = [
+      "twitch.channel.follow",
+      "twitch.channel.subscribe",
+      "twitch.channel.cheer",
+      "twitch.channel.subscription.gift",
+      "twitch.channel.raid",
+      "twitch.reward.redeem",
+    ];
+    if (!validTypes.includes(twitchEvent.type)) return;
+
     const key = hash(twitchEvent);
     const event = { ...twitchEvent, key };
-
-    if (event.type !== "twitch.channel.update") {
-      setNotifications((n) => [...n, event]);
-    }
+    setNotifications((n) => [...n, event]);
   };
 
-  useTopic<TwitchEvent>({ topic, endpoint, authorizer }, handleTwitchEvent);
+  useTopic<TwitchEvent>(
+    "notifications",
+    { topic, endpoint, authorizer },
+    handleTwitchEvent,
+  );
 
   const notificationsWithPrevious = [previous, ...(notifications || [])].filter(
     (notification) => !!notification,

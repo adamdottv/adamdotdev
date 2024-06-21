@@ -66,7 +66,11 @@ export const FollowerNotification: React.FC<FollowerNotificationProps> = ({
   event,
 }) => {
   useEffect(() => {
-    newFollowerAlert?.play();
+    try {
+      newFollowerAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
@@ -99,7 +103,11 @@ export const SubscriberNotification: React.FC<SubscriberNotificationProps> = ({
   event,
 }) => {
   useEffect(() => {
-    newSubscriberAlert?.play();
+    try {
+      newSubscriberAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
@@ -133,7 +141,11 @@ export const RewardRedemptionNotification: React.FC<
   RewardRedemptionNotificationProps
 > = ({ event, className = "", ...props }) => {
   useEffect(() => {
-    rewardRedemptionAlert?.play();
+    try {
+      rewardRedemptionAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
@@ -188,7 +200,11 @@ export const CheerNotification: React.FC<CheerNotificationProps> = ({
   ...props
 }) => {
   useEffect(() => {
-    cheerAlert?.play();
+    try {
+      cheerAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const cleanupCheerMessage = (message: string) => {
@@ -269,7 +285,11 @@ export const SubscriptionGiftNotification: React.FC<
   SubscriptionGiftNotificationProps
 > = ({ event, className = "", ...props }) => {
   useEffect(() => {
-    giftSubAlert?.play();
+    try {
+      giftSubAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
@@ -326,7 +346,11 @@ export const RaidNotification: React.FC<RaidNotificationProps> = ({
   ...props
 }) => {
   useEffect(() => {
-    raidAlert?.play();
+    try {
+      raidAlert?.play();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import { ChatClient } from "@twurple/chat";
 import { EventSubWsListener } from "@twurple/eventsub-ws";
 import { Resource } from "sst";
 import { Rewards as _Rewards } from "./rewards";
+import { Stream as _Stream } from "./stream";
 
 export module Twitch {
   export const Events = {
@@ -182,6 +183,7 @@ export module Twitch {
   export const UserId = Resource.TwitchUserId.value;
   export const UserName = "adamdotdev";
   export const Rewards = _Rewards;
+  export const Stream = _Stream;
 
   export module Client {
     export async function api() {

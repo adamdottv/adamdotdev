@@ -63,7 +63,6 @@ class TwitchController {
     this.chatClient.connect();
 
     this.chatClient.onMessage(async (channel, user, message, msg) => {
-      console.log("message", message);
       bus.publish(Resource.Bus, Twitch.Events.ChatMessage, {
         channel,
         user,

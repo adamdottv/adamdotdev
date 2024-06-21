@@ -3,10 +3,8 @@ import { realtime } from "sst/aws/realtime";
 
 export const handler = realtime.authorizer(async (token) => {
   const prefix = `${Resource.App.name}/${Resource.App.stage}`;
-  console.log("prefix", prefix);
-
   return {
-    publish: [`${prefix}/*`],
+    // publish: [`${prefix}/*`],
     subscribe: [`${prefix}/*`],
   };
 });

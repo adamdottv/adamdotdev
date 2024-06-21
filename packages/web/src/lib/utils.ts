@@ -7,18 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export function request(
-  input: URL | RequestInfo,
-  init?: RequestInit | undefined,
-): Promise<Response> {
-  const headers = { "x-api-key": process.env.NEXT_PUBLIC_API_KEY as string };
-
-  return fetch(input, {
-    ...init,
-    headers: { ...(init?.headers || {}), ...headers },
-  });
-}
-
 export const randomItem = <T>(array: Array<T>) => {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -34,6 +22,19 @@ export const shuffle = <T>(a: Array<T>) => {
   }
   return a;
 };
+
+export const songs = [
+  "theme-synth.wav",
+  "theme-piano.wav",
+  "theme-lofi.wav",
+  "theme-classical.wav",
+  "theme-edm.wav",
+  "theme-showtime.wav",
+  "theme-ballad.wav",
+  "theme-run-dmc.wav",
+  "theme-sonic.wav",
+  // "theme-horror.wav",
+];
 
 export const formatDate = (date?: Date | string) => {
   if (!date) return "";

@@ -2,7 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { logger } from "hono/logger";
 import { compress } from "hono/compress";
 import { handle, streamHandle } from "hono/aws-lambda";
-import { merchant } from "./merchant";
+import { publicApi } from "./public";
 
 const app = new OpenAPIHono();
 app.use("*", logger());
@@ -19,18 +19,18 @@ app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
   scheme: "bearer",
 });
 
-const routes = app.get("/", async (c) => {
+app.get("/", async (c) => {
   return c.json({
     message: "Hello, world!",
   });
 });
 
-// const routes = app.route("/merchant", merchant);
+const routes = app.route("/public", publicApi);
 
 app.doc("/doc", () => ({
   openapi: "3.0.0",
   info: {
-    title: "The adam.dev API",
+    title: "Adam's personal site API",
     version: "0.0.1",
   },
 }));

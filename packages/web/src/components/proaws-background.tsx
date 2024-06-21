@@ -32,6 +32,7 @@ export default async function ProAWSBackground() {
         <source media="(min-width: 640px)" srcSet={proaws640} />
         <source srcSet={proaws400} />
         <img {...rest} className="h-auto w-full" />
+        <div className="absolute inset-0 bg-black/85" />
       </picture>
     </div>
   );
