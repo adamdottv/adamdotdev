@@ -6,13 +6,27 @@ import clsx from "clsx";
 import Fathom from "@/components/fathom";
 import "@/styles/tailwind.css";
 
+const title = "Adam wuz here";
+const description =
+  "This is the personal site of a software developer named Adam. Get it? Adam dot dev??";
 export const metadata: Metadata = {
   title: {
     template: "%s - adam.dev",
-    default: "Adam wuz here",
+    default: title,
   },
-  description:
-    "This is the personal site of a software developer named Adam. Get it? Adam dot dev??",
+  description,
+  openGraph: {
+    type: "website",
+    url: "https://adam.dev",
+    title,
+    description,
+    siteName: "adam.dev",
+    images: [
+      {
+        url: "https://adam.dev/media/og-banner.png",
+      },
+    ],
+  },
 };
 
 const bebas = Bebas_Neue({
