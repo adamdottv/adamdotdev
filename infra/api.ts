@@ -17,7 +17,7 @@ const api = new sst.aws.Function("Api", {
 });
 
 export const apiRouter = new sst.aws.Router("ApiRouter", {
-  // domain: "api." + domain,
+  domain: "api." + domain,
   routes: { "/*": api.url },
 });
 
