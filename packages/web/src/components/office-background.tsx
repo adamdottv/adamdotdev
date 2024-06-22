@@ -4,6 +4,7 @@ export default async function OfficeBackground() {
       <video
         className="absolute left-1/2 top-1/2 -z-20 h-auto min-h-full w-auto min-w-full -translate-x-1/2 -translate-y-1/2 object-cover"
         autoPlay
+        playsInline
         muted
         loop
       >
