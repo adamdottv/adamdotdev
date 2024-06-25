@@ -1,9 +1,8 @@
-import { Resource } from "sst";
 import { ClientResponse, hc } from "hono/client";
 import type { AppType } from "@adamdotdev/functions/api";
 
-export const client = () => {
-  return hc<AppType>(Resource.ApiRouter.url, {
+export const client = (url: string) => {
+  return hc<AppType>(url, {
     fetch,
     headers: {
       // Authorization: `Bearer ${token}`,

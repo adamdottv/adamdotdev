@@ -4,11 +4,13 @@ import { useTopic } from "@/hooks/use-topic";
 import clsx from "clsx";
 import React from "react";
 import type { TwitchEvent } from "@adamdotdev/functions/events/event";
+import { client, handleResponse } from "@/lib/api";
 
 export interface LiveBannerProps extends React.ComponentProps<"a"> {
   topic: string;
   endpoint: string;
   authorizer: string;
+  apiUrl: string;
   live: boolean;
 }
 
@@ -17,10 +19,21 @@ export const LiveBanner: React.FC<LiveBannerProps> = ({
   topic,
   endpoint,
   authorizer,
+  apiUrl,
   className,
   ...props
 }) => {
   const [isLive, setIsLive] = React.useState(live);
+  React.useEffect(() => {
+    client(apiUrl)
+      .public.livestream.$get()
+      .then(handleResponse)
+      .then((res) => {
+        if (typeof res === "string") return;
+        setIsLive(res.live);
+      });
+  }, []);
+
   useTopic<TwitchEvent>(
     "live-banner",
     { topic, endpoint, authorizer },

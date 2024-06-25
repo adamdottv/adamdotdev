@@ -144,6 +144,7 @@ export default async function LandingPage() {
       <LiveBanner
         endpoint={Resource.Realtime.endpoint}
         authorizer={Resource.Realtime.authorizer}
+        apiUrl={Resource.ApiRouter.url}
         topic={topic}
         live={live}
       />
