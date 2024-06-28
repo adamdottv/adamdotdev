@@ -8,13 +8,14 @@
     "dev": "sst dev bun ./src/index.ts"
   },
   "dependencies": {
+    "@adamdotdev/core": "workspace:",
     "@aws-sdk/client-secrets-manager": "^3.598.0",
     "@twurple/api": "^7.0.3",
     "@twurple/auth": "^7.0.3",
     "@twurple/chat": "^7.0.3",
     "@twurple/eventsub-ws": "^7.0.3",
     "sst": "3.0.32",
-    "@adamdotdev/core": "workspace:"
+    "twitter-api-v2": "^1.17.1"
   },
   "devDependencies": {
     "@tsconfig/node20": "20.1.4"

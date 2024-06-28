@@ -34,6 +34,7 @@ cluster.addService("TwitchListener", {
     secret.Twitch.ClientSecret,
     secret.Twitch.UserId,
     secret.Twitch.Tokens,
+    secret.Twitter.BearerToken,
     bus,
   ],
   environment: {

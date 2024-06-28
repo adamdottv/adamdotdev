@@ -27,4 +27,15 @@ export const secret = {
       name: "twitch-tokens-secret",
     }),
   },
+  Twitter: {
+    ApiKey: new sst.Secret("TwitterApiKey", process.env.TWITTER_API_KEY),
+    ApiKeySecret: new sst.Secret(
+      "TwitterApiKeySecret",
+      process.env.TWITTER_API_KEY_SECRET,
+    ),
+    BearerToken: new sst.Secret(
+      "TwitterBearerToken",
+      process.env.TWITTER_BEARER_TOKEN,
+    ),
+  },
 };

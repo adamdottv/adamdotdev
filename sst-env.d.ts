@@ -46,6 +46,18 @@ declare module "sst" {
       type: "sst.sst.Secret"
       value: string
     }
+    TwitterApiKey: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    TwitterApiKeySecret: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    TwitterBearerToken: {
+      type: "sst.sst.Secret"
+      value: string
+    }
     WebApp: {
       type: "sst.aws.Nextjs"
       url: string
