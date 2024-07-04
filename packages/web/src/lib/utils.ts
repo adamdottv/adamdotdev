@@ -34,6 +34,7 @@ export const songs = [
   "theme-run-dmc.wav",
   "theme-sonic.wav",
   "theme-rtj.wav",
+  "theme-mellow.wav",
   // "theme-horror.wav",
 ];
 
