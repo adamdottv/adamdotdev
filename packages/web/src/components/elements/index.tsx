@@ -21,35 +21,6 @@ export const BrandMark = ({ className, ...props }: ComponentProps<"svg">) => {
   );
 };
 
-export const Timer = (props: { socket: WebSocket | null }) => {
-  const [timer, setTimer] = React.useState<string>();
-  // const stream = useStream(props.socket);
-
-  // React.useEffect(() => {
-  //   const actualStart = stream?.current?.actualStart;
-  //   if (!stream || !actualStart) return;
-  //
-  //   const intervalHandle = setInterval(() => {
-  //     const now = new Date();
-  //     const start = new Date(actualStart);
-  //     const diff = now.getTime() - start.getTime();
-  //     const timer = new Date(diff);
-  //     setTimer(timer.toISOString().substring(11, 19));
-  //   }, 1000);
-  //
-  //   return () => clearInterval(intervalHandle);
-  // }, [stream]);
-
-  return (
-    <div className="absolute inset-0 flex items-center">
-      <svg viewBox="0 0 160 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="25" cy="40" r="8" fill="#25D0AB" />
-      </svg>
-      <div className="absolute left-[49px] text-2xl text-mauve-12">{timer}</div>
-    </div>
-  );
-};
-
 export const BrandDetail = ({ className, ...props }: ComponentProps<"div">) => {
   return (
     <div
@@ -96,55 +67,6 @@ export const BrandDetail = ({ className, ...props }: ComponentProps<"div">) => {
     </div>
   );
 };
-
-// export const DefaultFooter: React.FC<
-//   ComponentProps<"div"> & { socket: WebSocket | null; topic?: string }
-// > = (props) => {
-//   const stream = useStream(props.socket)
-//   const { data } = useQuery(
-//     ["spotifyTrack"],
-//     async () => {
-//       const res = await request("/api/spotify")
-//       return await res.json()
-//     },
-//     { refetchInterval: 2000 }
-//   )
-//
-//   return (
-//     <div className="flex h-full space-x-10 px-10">
-//       <div className="relative w-40">
-//         <Timer socket={props.socket} />
-//       </div>
-//       <div className="relative flex flex-grow items-center justify-between text-lg text-mauve-12">
-//         {props.topic ||
-//           stream?.current?.title ||
-//           "we should probably set the topic"}
-//         {data && data.isPlaying && (
-//           <div className="flex items-center space-x-4">
-//             <div className="text-right">
-//               <div>{data.title}</div>
-//               <div className="text-sm text-mauve-11">{data.artist}</div>
-//             </div>
-//             <img
-//               src={data.albumImageUrl}
-//               alt={data.title}
-//               width={60}
-//               height={60}
-//               className="border-l-4 border-mint"
-//             />
-//           </div>
-//         )}
-//       </div>
-//       <div className="relative w-40">
-//         {data && data.isPlaying ? (
-//           <AudioSpectrum meterCount={8} width={160} height={60} />
-//         ) : (
-//           <BrandDetail />
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
 
 export const Ticket: React.FC<ComponentProps<"svg">> = (props) => {
   return (

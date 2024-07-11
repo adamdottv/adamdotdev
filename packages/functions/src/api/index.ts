@@ -1,10 +1,12 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { logger } from "hono/logger";
 import { compress } from "hono/compress";
 import { handle, streamHandle } from "hono/aws-lambda";
 import { publicApi } from "./public";
+import { hookApi } from "./hook";
+import { liveApi } from "./live";
+import { Hono } from "hono";
 
-const app = new OpenAPIHono();
+const app = new Hono();
 app.use("*", logger());
 app.use("*", compress());
 app.use("*", async (c, next) => {
@@ -14,26 +16,14 @@ app.use("*", async (c, next) => {
   }
 });
 
-app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
-  type: "http",
-  scheme: "bearer",
-});
-
 app.get("/", async (c) => {
   return c.json({
-    message: "Hello, world!",
+    Result: { message: "Hello, world!" },
   });
 });
 
-const routes = app.route("/public", publicApi);
-
-app.doc("/doc", () => ({
-  openapi: "3.0.0",
-  info: {
-    title: "Adam's personal site API",
-    version: "0.0.1",
-  },
-}));
+const routes = app.route("/public", publicApi).route("/live", liveApi);
+app.route("/hook", hookApi);
 
 export type AppType = typeof routes;
 export const handler = process.env.SST_LIVE ? handle(app) : streamHandle(app);

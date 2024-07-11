@@ -1,12 +1,6 @@
 import { iot, mqtt } from "aws-iot-device-sdk-v2";
 import React from "react";
 
-export interface useTopicProps {
-  topic: string;
-  endpoint: string;
-  authorizer: string;
-}
-
 const connections: Map<string, mqtt.MqttClientConnection> = new Map();
 async function createConnection(endpoint: string, authorizer: string) {
   const key = `${endpoint}.${authorizer}`;
@@ -38,16 +32,19 @@ async function createConnection(endpoint: string, authorizer: string) {
 
 const subscribers: Map<string, unknown> = new Map();
 export const useTopic = <T>(
+  topic: string,
   key: string,
-  options: useTopicProps,
   onMessage: (message: T) => void,
-) =>
+) => {
+  const endpoint = process.env.NEXT_PUBLIC_REALTIME_ENDPOINT as string;
+  const authorizer = process.env.NEXT_PUBLIC_REALTIME_AUTHORIZER as string;
+
   React.useEffect(() => {
-    createConnection(options.endpoint, options.authorizer).then((conn) => {
+    createConnection(endpoint, authorizer).then((conn) => {
       if (subscribers.has(key)) return;
       subscribers.set(key, null);
 
-      conn.subscribe(options.topic, mqtt.QoS.AtLeastOnce, (_topic, payload) => {
+      conn.subscribe(topic, mqtt.QoS.AtLeastOnce, (_topic, payload) => {
         const raw = new TextDecoder("utf8").decode(new Uint8Array(payload));
         const message = JSON.parse(raw) as T;
         onMessage(message);
@@ -56,4 +53,5 @@ export const useTopic = <T>(
     return () => {
       // connection.unsubscribe(options.topic);
     };
-  }, [key, options.topic, options.endpoint, options.authorizer]);
+  }, [key, topic, endpoint, authorizer]);
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import type { TwitchEvent } from "@adamdotdev/functions/events/event";
+import type { TwitchEvent } from "@adamdotdev/functions/events/twitch";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import { useQueue } from "@/hooks/use-queue";
@@ -12,15 +12,7 @@ const MAX_NOTIFICATIONS = 3;
 const NOTIFICATION_DURATION = 3;
 const NOTIFICATION_PANEL_HEIGHT = MAX_NOTIFICATIONS * 100 + 65;
 
-export default function Notifications({
-  topic,
-  endpoint,
-  authorizer,
-}: {
-  topic: string;
-  endpoint: string;
-  authorizer: string;
-}) {
+export default function Notifications() {
   const [_, setNotifications, notifications, previous] = useQueue<
     TwitchEvent & { key: string }
   >({
@@ -36,6 +28,7 @@ export default function Notifications({
       "twitch.channel.subscription.gift",
       "twitch.channel.raid",
       "twitch.reward.redeem",
+      "terminal-sale",
     ];
     if (!validTypes.includes(twitchEvent.type)) return;
 
@@ -45,8 +38,8 @@ export default function Notifications({
   };
 
   useTopic<TwitchEvent>(
+    process.env.NEXT_PUBLIC_REALTIME_NOTIFICATIONS_TOPIC as string,
     "notifications",
-    { topic, endpoint, authorizer },
     handleTwitchEvent,
   );
 

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# spotify api credentials
+client_id=$(echo $SST_RESOURCE_SpotifyClientId | jq -r '.value')
+client_secret=$(echo $SST_RESOURCE_SpotifyClientSecret | jq -r '.value')
+redirect_uri="http://localhost:3333"
+scope="user-read-currently-playing user-top-read user-modify-playback-state user-read-playback-state"
+
+# step 1: get authorization code
+auth_url="https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=${scope}"
+echo "open the following url in your browser and authorize the app:"
+echo $auth_url
+
+# prompt user to enter the authorization code
+read -p "enter the authorization code: " authorization_code
+
+# step 2: exchange authorization code for access and refresh tokens
+token_response=$(curl -s -X POST -d "grant_type=authorization_code&code=${authorization_code}&redirect_uri=${redirect_uri}&client_id=${client_id}&client_secret=${client_secret}" https://accounts.spotify.com/api/token)
+
+# extract tokens using jq
+access_token=$(echo $token_response | jq -r .access_token)
+refresh_token=$(echo $token_response | jq -r .refresh_token)
+
+# display tokens
+echo "access token: $access_token"
+echo "refresh token: $refresh_token"
+
+sst secret set SpotifyRefreshToken $refresh_token
+

@@ -5,7 +5,9 @@ const nanoid = customAlphabet(
 );
 const lowercase = customAlphabet("123456789abcdefghijkmnopqrstuvwxyz");
 
-const prefixes = {} as const;
+const prefixes = {
+  spotify: "spf",
+} as const;
 
 export function createID(prefix: keyof typeof prefixes): string {
   return [prefixes[prefix], nanoid(16)].join("_");

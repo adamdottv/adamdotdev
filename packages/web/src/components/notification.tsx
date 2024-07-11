@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useEffect } from "react";
 import { Ticker } from "@/components/ticker";
 import { AnimationProps, motion } from "framer-motion";
 import clsx from "clsx";
-import { TwitchEvent } from "@adamdotdev/functions/events/event";
+import { TwitchEvent } from "@adamdotdev/functions/events/twitch";
 
 const formatBigNumber = (number: number) => {
   if (number < 10000) {
@@ -125,6 +125,57 @@ export const SubscriberNotification: React.FC<SubscriberNotificationProps> = ({
       </div>
       <Ticker />
     </NotificationContainer>
+  );
+};
+
+export interface GenericNotificationProps extends React.ComponentProps<"div"> {
+  event: {
+    type: "terminal-sale";
+    title: string;
+    body: string;
+    note: string;
+    number: number;
+    label: string;
+  };
+}
+export const GenericNotification: React.FC<GenericNotificationProps> = ({
+  event,
+  className = "",
+  ...props
+}) => {
+  return (
+    <div
+      className={clsx({
+        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
+          true,
+        "border border-border border-l-terminal": true,
+        [className]: true,
+      })}
+      {...props}
+    >
+      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
+        <BrandedDots className="absolute inset-0" />
+        <Confetti className="absolute inset-0" />
+      </div>
+
+      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
+        <div className="h-[54px] w-[49px]">
+          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
+            {formatBigNumber(event.number)}
+          </div>
+          <div className="text-xl uppercase">{event.label}</div>
+        </div>
+      </div>
+      <div>
+        <div className="text-xs font-semibold uppercase tracking-[0.02em] text-terminal">
+          {event.title}
+        </div>
+        <div className="text-lg font-normal text-white">{event.body}</div>
+        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
+          {event.note}
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -410,6 +461,8 @@ export const Notification: React.FC<NotificationProps> = ({
       return (
         <SubscriberNotification event={notification.properties} {...props} />
       );
+    case "terminal-sale":
+      return <GenericNotification event={notification} {...props} />;
     case "twitch.reward.redeem":
       return (
         <RewardRedemptionNotification

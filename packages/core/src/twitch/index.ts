@@ -197,9 +197,7 @@ export module Twitch {
     }
 
     export async function listener() {
-      return Twitch.Client.api().then(
-        (apiClient) => new EventSubWsListener({ apiClient }),
-      );
+      return api().then((apiClient) => new EventSubWsListener({ apiClient }));
     }
   }
 }

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+method=${1:-GET}
+path=${2:-/}
+body=${3:-""}
+
+base=$(echo $SST_RESOURCE_ApiRouter | jq -r '.url')
+key=$(echo $SST_RESOURCE_ApiKey | jq -r '.value')
+url="$base$path"
+
+if [ "$method" == "GET" ]; then
+    response=$(curl -s -X $method -H "Authorization: Bearer $key" -H "Content-type: application/json" "$url")
+else
+    response=$(curl -s -X $method -H "Authorization: Bearer $key" -H "Content-type: application/json" --data "$body" "$url")
+fi
+
+echo $response
+
+json=$(echo $response | jq -r '.Result')
+echo "$json" | jq .
+

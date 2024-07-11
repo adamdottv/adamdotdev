@@ -11,8 +11,11 @@ export default $config({
         aws: {
           region: "us-east-1",
           profile:
-            input.stage === "production" ? "proaws-production" : "proaws-dev",
+            input.stage === "production"
+              ? "adamdotdev-production"
+              : "adamdotdev-dev",
         },
+        "pulumi-stripe": true,
       },
     };
   },

@@ -1,7 +1,4 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { LivestreamApi } from "./livestream";
+import { Hono } from "hono";
 
-export const publicApi = new OpenAPIHono().route(
-  "/livestream",
-  LivestreamApi.route,
-);
+export const publicApi = new Hono().route("/livestream", LivestreamApi.route);

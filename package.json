@@ -4,17 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "sst dev",
-    "sso": "aws sso login --sso-session=proaws"
+    "sso": "aws sso login --sso-session=adamdotdev"
   },
   "workspaces": [
     "packages/*"
   ],
   "dependencies": {
-    "sst": "3.0.32"
+    "sst": "3.0.37"
   },
   "devDependencies": {
     "@tsconfig/node20": "20.1.4",
     "typescript": "5.4.5"
   },
-  "author": "Adam Elmore <me@adam.dev> (https://adam.dev/)"
+  "author": "Adam Elmore <me@adam.dev> (https://adam.dev/)",
+  "patchedDependencies": {
+    "obs-websocket-js@5.0.5": "patches/obs-websocket-js@5.0.5.patch"
+  }
 }

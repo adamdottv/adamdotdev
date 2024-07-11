@@ -1,0 +1,25 @@
+{
+  "name": "@adamdotdev/service",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "sst dev --silent \"bun ./src/index.ts\""
+  },
+  "dependencies": {
+    "@adamdotdev/core": "workspace:",
+    "@aws-sdk/client-secrets-manager": "^3.598.0",
+    "@hono/zod-validator": "^0.2.2",
+    "@twurple/api": "^7.0.3",
+    "@twurple/auth": "^7.0.3",
+    "@twurple/chat": "^7.0.3",
+    "@twurple/eventsub-ws": "^7.0.3",
+    "hono": "4.0.1",
+    "obs-websocket-js": "^5.0.5",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "20.1.4"
+  }
+}

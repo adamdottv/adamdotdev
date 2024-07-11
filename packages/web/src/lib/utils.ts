@@ -5,8 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
 export const randomItem = <T>(array: Array<T>) => {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -37,6 +35,8 @@ export const songs = [
   "theme-mellow.wav",
   // "theme-horror.wav",
 ];
+
+export const playlist = shuffle(songs);
 
 export const formatDate = (date?: Date | string) => {
   if (!date) return "";

@@ -21,10 +21,58 @@ declare module "sst" {
       name: string
       type: "sst.aws.Bus"
     }
+    Database: {
+      clusterArn: string
+      database: string
+      secretArn: string
+      type: "sst.aws.Postgres"
+    }
+    ObsPassword: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    ObsWebsocket: {
+      type: "sst.sst.Resource"
+      url: string
+    }
     Realtime: {
       authorizer: string
       endpoint: string
       type: "sst.aws.Realtime"
+    }
+    Service: {
+      type: "sst.aws.Service"
+      url: string
+    }
+    SpotifyAccessToken: {
+      arn: string
+      id: string
+      type: "aws.secretsmanager/secret.Secret"
+    }
+    SpotifyClientId: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    SpotifyClientSecret: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    SpotifyRefreshToken: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    StaticIpAddress: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    TerminalStripeSecret: {
+      type: "sst.sst.Secret"
+      value: string
+    }
+    TerminalStripeWebhook: {
+      id: string
+      secret: string
+      type: "stripe.index/webhookEndpoint.WebhookEndpoint"
     }
     TwitchClientId: {
       type: "sst.sst.Secret"
@@ -33,9 +81,6 @@ declare module "sst" {
     TwitchClientSecret: {
       type: "sst.sst.Secret"
       value: string
-    }
-    TwitchListener: {
-      type: "sst.aws.Service"
     }
     TwitchTokens: {
       arn: string

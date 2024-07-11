@@ -3,29 +3,22 @@
 import { useTopic } from "@/hooks/use-topic";
 import clsx from "clsx";
 import React from "react";
-import type { TwitchEvent } from "@adamdotdev/functions/events/event";
-import { client, handleResponse } from "@/lib/api";
+import type { TwitchEvent } from "@adamdotdev/functions/events/twitch";
+import { handleResponse } from "@/lib/api";
+import { client } from "@/lib/api/client";
 
 export interface LiveBannerProps extends React.ComponentProps<"a"> {
-  topic: string;
-  endpoint: string;
-  authorizer: string;
-  apiUrl: string;
   live: boolean;
 }
 
 export const LiveBanner: React.FC<LiveBannerProps> = ({
   live,
-  topic,
-  endpoint,
-  authorizer,
-  apiUrl,
   className,
   ...props
 }) => {
   const [isLive, setIsLive] = React.useState(live);
   React.useEffect(() => {
-    client(apiUrl)
+    client()
       .public.livestream.$get()
       .then(handleResponse)
       .then((res) => {
@@ -35,8 +28,8 @@ export const LiveBanner: React.FC<LiveBannerProps> = ({
   }, []);
 
   useTopic<TwitchEvent>(
+    process.env.NEXT_PUBLIC_REALTIME_NOTIFICATIONS_TOPIC as string,
     "live-banner",
-    { topic, endpoint, authorizer },
     (evt) => {
       if (evt.type === "twitch.channel.online") {
         setIsLive(true);
@@ -53,7 +46,7 @@ export const LiveBanner: React.FC<LiveBannerProps> = ({
       href="https://adam.tv"
       target="_blank"
       className={clsx({
-        "bg-recording fixed inset-x-0 top-0 flex h-10 items-center justify-center gap-2 overflow-clip":
+        "fixed inset-x-0 top-0 flex h-10 items-center justify-center gap-2 overflow-clip bg-recording":
           true,
         [className ?? ""]: !!className,
       })}

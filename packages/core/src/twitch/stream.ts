@@ -1,17 +1,10 @@
 import { z } from "zod";
 import { Twitch } from ".";
 import { HelixStream } from "@twurple/api";
+import { StreamInfo } from "../schema";
+import { randomItem } from "../util";
 
 export module Stream {
-  export const Info = z.object({
-    live: z.boolean(),
-    title: z.string().optional(),
-    category: z.string().optional(),
-    viewers: z.number().optional(),
-    started: z.string().optional(),
-    thumbnail: z.string().optional(),
-  });
-
   export async function get() {
     const twitch = await Twitch.Client.api();
     return twitch.streams.getStreamByUserId(Twitch.UserId).then(serialize);
@@ -19,7 +12,15 @@ export module Stream {
 
   export async function getSchedule() {
     const twitch = await Twitch.Client.api();
-    return twitch.schedule.getSchedule(Twitch.UserId);
+    const schedule = await twitch.schedule.getSchedule(Twitch.UserId);
+    const segments = schedule.data.segments.map(
+      ({ title, startDate, endDate }) => ({
+        title,
+        start: startDate,
+        end: endDate,
+      }),
+    );
+    return segments;
   }
 
   export async function getMetadata() {
@@ -27,7 +28,33 @@ export module Stream {
     return twitch.channels.getChannelInfoById(Twitch.UserId);
   }
 
-  function serialize(input: HelixStream | null): z.infer<typeof Info> {
+  export async function raid() {
+    const twitch = await Twitch.Client.api();
+    const response =
+      (await twitch.streams.getStreamsByUserNames([
+        "thdxr",
+        "theprimeagen",
+        "teej_dv",
+        "StudyTme",
+        "acorn1010",
+        "bashbunni",
+        "thealtf4stream",
+        "ottomated",
+        "cmgriffing",
+        "theo",
+        "d0nutptr",
+        "roxcodes",
+        "melkey",
+        "dmmulroy",
+      ])) || [];
+    const streams = response.map((r) => r.userId);
+    if (!streams) return;
+
+    const randomStream = randomItem(streams);
+    await twitch.raids.startRaid(Twitch.UserId, randomStream);
+  }
+
+  function serialize(input: HelixStream | null): z.infer<typeof StreamInfo> {
     return {
       live: !!input,
       title: input?.title,

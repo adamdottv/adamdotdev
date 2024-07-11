@@ -16,7 +16,7 @@
   "dependencies": {
     "@adamdotdev/core": "workspace:",
     "@aws-sdk/client-iot-data-plane": "^3.598.0",
-    "@hono/zod-openapi": "0.11.0",
+    "@hono/zod-validator": "^0.2.2",
     "hono": "4.0.1",
     "valibot": "0.31.0-rc.11",
     "zod": "3.23.8"
