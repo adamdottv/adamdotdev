@@ -5,7 +5,17 @@ import { ObsApi } from "./obs";
 import { TwitchApi } from "./twitch";
 import { SpotifyApi } from "./spotify";
 
-const app = new Hono().get("/", (c) => c.text("ok")); // health check
+const app = new Hono().get("/", (c) => {
+  // health check
+  if (
+    TwitchApi.controller.ok() &&
+    ObsApi.proxy.ok() &&
+    SpotifyApi.controller.ok()
+  ) {
+    return c.text("ok");
+  }
+  return c.text("not ok", 500);
+});
 
 const api = new Hono().use(async (c, next) => {
   const authorization = c.req.header("authorization");

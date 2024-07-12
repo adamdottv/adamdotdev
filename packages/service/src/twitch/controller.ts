@@ -13,8 +13,8 @@ export class TwitchController {
     this.setup();
   }
 
-  ping() {
-    return "pong" as const;
+  ok() {
+    return true;
   }
 
   async setup() {
@@ -26,9 +26,9 @@ export class TwitchController {
     await this.setupEventSub();
     await this.setupChatBot();
 
-    // if (Resource.App.stage === "adam") {
-    //   await this.sendFakeEvents();
-    // }
+    if (Resource.App.stage === "adam") {
+      await this.sendFakeEvents();
+    }
 
     console.log("Twitch setup complete!");
   }

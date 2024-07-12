@@ -8,8 +8,8 @@ export class SpotifyController {
     this.setup();
   }
 
-  ping() {
-    return "pong" as const;
+  ok() {
+    return true;
   }
 
   async setup() {

@@ -5,7 +5,7 @@ import { ObsProxy } from "./proxy";
 import { Scene } from "@adamdotdev/core/schema";
 
 export module ObsApi {
-  const proxy = new ObsProxy();
+  export const proxy = new ObsProxy();
 
   export const route = new Hono()
     .use(async (c, next) => {

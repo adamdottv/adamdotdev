@@ -20,6 +20,10 @@ export class ObsProxy {
     this.setup();
   }
 
+  ok() {
+    return true;
+  }
+
   private async setup() {
     if (!Resource.ObsPassword.value) {
       console.error("You haven't set the ObsPassword secret!");
