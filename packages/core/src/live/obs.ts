@@ -125,8 +125,9 @@ export module OBS {
       body: body ? JSON.stringify(body) : undefined,
     })
       .then(async (r) => {
-        if (!r.ok) return await r.text();
-        const result = (await r.json()) as T;
+        const text = await r.text();
+        if (!r.ok || text === "ok") return text;
+        const result = JSON.parse(text) as T;
         return { Result: result };
       })
       .catch((error) => {

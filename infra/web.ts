@@ -14,8 +14,7 @@ export const web = new sst.aws.Nextjs("WebApp", {
     NEXT_PUBLIC_API_URL: apiRouter.url,
     NEXT_PUBLIC_REALTIME_ENDPOINT: realtime.endpoint,
     NEXT_PUBLIC_REALTIME_AUTHORIZER: realtime.authorizer,
-    NEXT_PUBLIC_REALTIME_NOTIFICATIONS_TOPIC: `${$app.name}/${$app.stage}/notifs`,
-    NEXT_PUBLIC_REALTIME_LIVE_TOPIC: `${$app.name}/${$app.stage}/live`,
+    NEXT_PUBLIC_REALTIME_TOPIC: `${$app.name}/${$app.stage}/live`,
     NEXT_PUBLIC_DEV: String($dev),
   },
 });

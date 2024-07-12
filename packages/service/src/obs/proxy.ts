@@ -1,7 +1,7 @@
 import { Resource } from "sst";
 import OBSWebSocket from "obs-websocket-js";
 import { delay } from "@adamdotdev/core/util/index";
-import { OBS } from "@adamdotdev/core/overlays/obs";
+import { OBS } from "@adamdotdev/core/live/obs";
 import { SceneName } from "@adamdotdev/core/schema";
 
 export class ObsProxy {

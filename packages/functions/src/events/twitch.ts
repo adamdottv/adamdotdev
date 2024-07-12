@@ -1,20 +1,30 @@
 import { bus } from "sst/aws/bus";
 import { Twitch } from "@adamdotdev/core/twitch/index";
-import { Notifications } from "@adamdotdev/core/notifications/index";
-import { Realtime } from "@adamdotdev/core/overlays/realtime";
+import { Realtime } from "@adamdotdev/core/live/realtime";
 
 export const handler = bus.subscriber([...Twitch.AllEvents], async (event) => {
   console.log("event", event);
 
-  // TODO: don't do this
-  await Notifications.send(event);
-
   switch (event.type) {
     case "twitch.channel.online":
+      await Realtime.push({
+        type: "live.stream.updated",
+        properties: await Twitch.Stream.get(),
+      });
       await Twitch.Rewards.enableAll();
       break;
     case "twitch.channel.offline":
+      await Realtime.push({
+        type: "live.stream.updated",
+        properties: await Twitch.Stream.get(),
+      });
       await Twitch.Rewards.disableAll();
+      break;
+    case "twitch.channel.update":
+      await Realtime.push({
+        type: "live.stream.updated",
+        properties: await Twitch.Stream.get(),
+      });
       break;
     case "twitch.chat.message":
       await Realtime.push({
@@ -27,31 +37,26 @@ export const handler = bus.subscriber([...Twitch.AllEvents], async (event) => {
         },
       });
       break;
-    case "twitch.channel.update":
-      await Realtime.push({
-        type: "live.stream.updated",
-        properties: await Twitch.Stream.get(),
-      });
+    case "twitch.channel.follow":
+      await Twitch.Notifications.follower(event);
+      break;
+    case "twitch.channel.subscribe":
+      await Twitch.Notifications.subscriber(event);
+      break;
+    case "twitch.channel.subscription.gift":
+      await Twitch.Notifications.gift(event);
+      break;
+    case "twitch.channel.cheer":
+      await Twitch.Notifications.cheer(event);
+      break;
+    case "twitch.reward.redeem":
+      await Twitch.Notifications.redemption(event);
+      break;
+    case "twitch.channel.raid":
+      await Twitch.Notifications.raid(event);
       break;
 
     default:
       break;
   }
 });
-
-export type TwitchEvent = Parameters<
-  Parameters<
-    typeof bus.subscriber<
-      | typeof Twitch.Events.ChannelOnline
-      | typeof Twitch.Events.ChannelOffline
-      | typeof Twitch.Events.ChannelFollow
-      | typeof Twitch.Events.ChannelSubscribe
-      | typeof Twitch.Events.ChannelUpdate
-      | typeof Twitch.Events.ChannelCheer
-      | typeof Twitch.Events.ChannelSubscriptionGift
-      | typeof Twitch.Events.ChannelRaid
-      | typeof Twitch.Events.ChatMessage
-      | typeof Twitch.Events.RewardRedeem
-    >
-  >[1]
->[0];

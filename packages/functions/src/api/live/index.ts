@@ -4,7 +4,7 @@ import { TransitionApi } from "./transition";
 import { BreakApi } from "./break";
 import { ZoomApi } from "./zoom";
 import { SpotifyApi } from "./spotify";
-import { Live } from "@adamdotdev/core/overlays/index";
+import { Live } from "@adamdotdev/core/live/index";
 
 export const apexRoute = new Hono()
   .post("/", async (c) => {

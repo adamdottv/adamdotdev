@@ -1,11 +1,11 @@
 import { iot, mqtt } from "aws-iot-device-sdk-v2";
 import React from "react";
 
-const connections: Map<string, mqtt.MqttClientConnection> = new Map();
-async function createConnection(endpoint: string, authorizer: string) {
-  const key = `${endpoint}.${authorizer}`;
-  if (connections.has(key)) return connections.get(key)!;
+const endpoint = process.env.NEXT_PUBLIC_REALTIME_ENDPOINT as string;
+const authorizer = process.env.NEXT_PUBLIC_REALTIME_AUTHORIZER as string;
+const topic = process.env.NEXT_PUBLIC_REALTIME_TOPIC as string;
 
+async function createConnection(endpoint: string, authorizer: string) {
   return new Promise<mqtt.MqttClientConnection>((resolve, reject) => {
     const client = new mqtt.MqttClient();
     const id = window.crypto.randomUUID();
@@ -23,35 +23,37 @@ async function createConnection(endpoint: string, authorizer: string) {
       reject(error);
     });
     connection.on("connect", (_sessionPresent) => {
-      connections.set(key, connection);
       resolve(connection);
     });
     connection.connect();
   });
 }
 
-const subscribers: Map<string, unknown> = new Map();
-export const useTopic = <T>(
-  topic: string,
-  key: string,
-  onMessage: (message: T) => void,
-) => {
-  const endpoint = process.env.NEXT_PUBLIC_REALTIME_ENDPOINT as string;
-  const authorizer = process.env.NEXT_PUBLIC_REALTIME_AUTHORIZER as string;
-
+const subscribers: Map<string, { connection: mqtt.MqttClientConnection }> =
+  new Map();
+export const useTopic = <T>(key: string, onMessage: (message: T) => void) => {
   React.useEffect(() => {
-    createConnection(endpoint, authorizer).then((conn) => {
-      if (subscribers.has(key)) return;
-      subscribers.set(key, null);
+    if (subscribers.has(key)) return;
 
-      conn.subscribe(topic, mqtt.QoS.AtLeastOnce, (_topic, payload) => {
-        const raw = new TextDecoder("utf8").decode(new Uint8Array(payload));
-        const message = JSON.parse(raw) as T;
-        onMessage(message);
-      });
-    });
+    createConnection(endpoint, authorizer)
+      .then((conn) => {
+        if (subscribers.has(key)) return;
+        subscribers.set(key, { connection: conn });
+
+        conn.subscribe(topic, mqtt.QoS.AtLeastOnce, (_topic, payload) => {
+          const raw = new TextDecoder("utf8").decode(new Uint8Array(payload));
+          const message = JSON.parse(raw) as T;
+          onMessage(message);
+        });
+      })
+      .catch(console.error);
+
     return () => {
-      // connection.unsubscribe(options.topic);
+      if (subscribers.has(key)) {
+        const { connection } = subscribers.get(key)!;
+        connection.unsubscribe(topic);
+        subscribers.delete(key);
+      }
     };
-  }, [key, topic, endpoint, authorizer]);
+  }, [key]);
 };

@@ -1,11 +1,10 @@
 "use client";
 
-import { useTopic } from "@/hooks/use-topic";
 import clsx from "clsx";
 import React from "react";
-import type { TwitchEvent } from "@adamdotdev/functions/events/twitch";
 import { handleResponse } from "@/lib/api";
 import { client } from "@/lib/api/client";
+import { useEvent } from "@/hooks/use-event";
 
 export interface LiveBannerProps extends React.ComponentProps<"a"> {
   live: boolean;
@@ -27,17 +26,9 @@ export const LiveBanner: React.FC<LiveBannerProps> = ({
       });
   }, []);
 
-  useTopic<TwitchEvent>(
-    process.env.NEXT_PUBLIC_REALTIME_NOTIFICATIONS_TOPIC as string,
-    "live-banner",
-    (evt) => {
-      if (evt.type === "twitch.channel.online") {
-        setIsLive(true);
-      } else if (evt.type === "twitch.channel.offline") {
-        setIsLive(false);
-      }
-    },
-  );
+  useEvent("live.stream.updated", (evt) => {
+    setIsLive(evt.properties.live);
+  });
 
   if (!isLive) return null;
 

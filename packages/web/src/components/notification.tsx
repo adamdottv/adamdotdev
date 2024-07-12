@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Ticker } from "@/components/ticker";
 import { AnimationProps, motion } from "framer-motion";
 import clsx from "clsx";
-import { TwitchEvent } from "@adamdotdev/functions/events/twitch";
+import { Notification } from "@adamdotdev/core/schema";
 
 const formatBigNumber = (number: number) => {
   if (number < 10000) {
@@ -11,280 +11,66 @@ const formatBigNumber = (number: number) => {
   return `${Math.floor(number / 1000)}K`;
 };
 
-export interface NotificationContainerProps
-  extends PropsWithChildren<React.ComponentProps<"div">> {
-  accent?: "crimson" | "lime" | "mint" | "purple" | "sky";
-}
-
-export const NotificationContainer: React.FC<NotificationContainerProps> = ({
-  children,
-  accent = "lime",
-  className = "",
-  ...props
-}) => {
-  return (
-    <div
-      className={clsx({
-        "h-20 border-l bg-black/80 backdrop-blur-sm": true,
-        "border border-border": true,
-        "border-l-lime": accent === "lime",
-        "border-l-crimson": accent === "crimson",
-        "border-l-mint": accent === "mint",
-        "border-l-purple": accent === "purple",
-        "border-l-sky": accent === "sky",
-        [className]: true,
-      })}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-
-const newFollowerAlert =
-  typeof Audio !== "undefined" ? new Audio("/media/tada-05.mp3") : undefined;
-const newSubscriberAlert =
-  typeof Audio !== "undefined" ? new Audio("/media/tada-04.mp3") : undefined;
-const rewardRedemptionAlert =
+const nopeSound =
   typeof Audio !== "undefined" ? new Audio("/media/nope.mp3") : undefined;
-const raidAlert =
-  typeof Audio !== "undefined" ? new Audio("/media/tada-02.mp3") : undefined;
-const giftSubAlert =
-  typeof Audio !== "undefined" ? new Audio("/media/tada-03.mp3") : undefined;
-const cheerAlert =
+const tada1Sound =
   typeof Audio !== "undefined" ? new Audio("/media/tada-01.mp3") : undefined;
+const tada2Sound =
+  typeof Audio !== "undefined" ? new Audio("/media/tada-02.mp3") : undefined;
+const tada3Sound =
+  typeof Audio !== "undefined" ? new Audio("/media/tada-03.mp3") : undefined;
+const tada4Sound =
+  typeof Audio !== "undefined" ? new Audio("/media/tada-04.mp3") : undefined;
+const tada5Sound =
+  typeof Audio !== "undefined" ? new Audio("/media/tada-05.mp3") : undefined;
 
-type TwitchChannelFollowEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.channel.follow" }
->["properties"];
-export interface FollowerNotificationProps {
-  event: TwitchChannelFollowEvent;
-}
-
-export const FollowerNotification: React.FC<FollowerNotificationProps> = ({
-  event,
-}) => {
-  useEffect(() => {
-    try {
-      newFollowerAlert?.play();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  return (
-    <NotificationContainer
-      accent="lime"
-      className="flex items-center justify-between px-8"
-    >
-      <div>
-        <div className="text-xs font-semibold uppercase text-lime">
-          New Follower
-        </div>
-        <div className="text-lg font-[400] text-white">
-          @{event.userDisplayName}
-        </div>
-      </div>
-      <Ticker />
-    </NotificationContainer>
-  );
-};
-
-type TwitchChannelSubscribeEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.channel.subscribe" }
->["properties"];
-export interface SubscriberNotificationProps {
-  event: TwitchChannelSubscribeEvent;
-}
-
-export const SubscriberNotification: React.FC<SubscriberNotificationProps> = ({
-  event,
-}) => {
-  useEffect(() => {
-    try {
-      newSubscriberAlert?.play();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  return (
-    <NotificationContainer
-      accent="crimson"
-      className="flex items-center justify-between px-8"
-    >
-      <div>
-        <div className="text-xs font-semibold uppercase text-crimson">
-          Tier {event.tier[0]} Subscriber
-        </div>
-        <div className="text-lg font-[400] text-white">
-          @{event.userDisplayName}
-        </div>
-      </div>
-      <Ticker />
-    </NotificationContainer>
-  );
-};
-
-export interface GenericNotificationProps extends React.ComponentProps<"div"> {
-  event: {
-    type: "terminal-sale";
-    title: string;
-    body: string;
-    note: string;
-    number: number;
-    label: string;
-  };
-}
-export const GenericNotification: React.FC<GenericNotificationProps> = ({
-  event,
-  className = "",
-  ...props
-}) => {
-  return (
-    <div
-      className={clsx({
-        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
-          true,
-        "border border-border border-l-terminal": true,
-        [className]: true,
-      })}
-      {...props}
-    >
-      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
-        <BrandedDots className="absolute inset-0" />
-        <Confetti className="absolute inset-0" />
-      </div>
-
-      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
-        <div className="h-[54px] w-[49px]">
-          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
-            {formatBigNumber(event.number)}
-          </div>
-          <div className="text-xl uppercase">{event.label}</div>
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.02em] text-terminal">
-          {event.title}
-        </div>
-        <div className="text-lg font-normal text-white">{event.body}</div>
-        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
-          {event.note}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type TwitchChannelRedemptionEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.reward.redeem" }
->["properties"];
-export interface RewardRedemptionNotificationProps
+export interface NotificationComponentProps
   extends React.ComponentProps<"div"> {
-  event: TwitchChannelRedemptionEvent;
+  notification: Notification;
 }
 
-export const RewardRedemptionNotification: React.FC<
-  RewardRedemptionNotificationProps
-> = ({ event, className = "", ...props }) => {
-  useEffect(() => {
-    try {
-      rewardRedemptionAlert?.play();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  return (
-    <div
-      className={clsx({
-        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
-          true,
-        "border border-border border-l-mint": true,
-        [className]: true,
-      })}
-      {...props}
-    >
-      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
-        <BrandedDots className="absolute inset-0" />
-        <Confetti className="absolute inset-0" />
-      </div>
-
-      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
-        <div className="h-[54px] w-[49px]">
-          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
-            {formatBigNumber(event.rewardCost)}
-          </div>
-          <div className="text-xl uppercase">points</div>
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.02em] text-mint">
-          Reward Redeemed
-        </div>
-        <div className="text-lg font-normal text-white">
-          @{event.userDisplayName}
-        </div>
-        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
-          {event.rewardTitle}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type TwitchChannelCheerEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.channel.cheer" }
->["properties"];
-export interface CheerNotificationProps extends React.ComponentProps<"div"> {
-  event: TwitchChannelCheerEvent;
-}
-
-export const CheerNotification: React.FC<CheerNotificationProps> = ({
-  event,
+export const NotificationComponent: React.FC<NotificationComponentProps> = ({
+  notification,
   className = "",
   ...props
 }) => {
+  const color = notification.color ?? "#25D0AB";
+
   useEffect(() => {
+    let sound: HTMLAudioElement | undefined = undefined;
+    switch (notification.sound) {
+      case "nope":
+        sound = nopeSound;
+        break;
+      case "tada1":
+        sound = tada1Sound;
+        break;
+      case "tada2":
+        sound = tada2Sound;
+        break;
+      case "tada3":
+        sound = tada3Sound;
+        break;
+      case "tada4":
+        sound = tada4Sound;
+        break;
+      case "tada5":
+        sound = tada5Sound;
+        break;
+      default:
+        break;
+    }
     try {
-      cheerAlert?.play();
+      sound?.play();
     } catch (error) {
       console.log(error);
     }
   }, []);
 
-  const cleanupCheerMessage = (message: string) => {
-    return message
-      .replace(
-        /(Anon|Cheer|BibleThump|cheerwhal|Corgo|uni|ShowLove|Party|SeemsGood|Pride|Kappa|FrankerZ|HeyGuys|DansGame|EleGiggle|TriHard|Kreygasm|4Head|SwiftRage|NotLikeThis|FailFish|VoHiYo|PJSalt|MrDestructoid|bday|RIPCheer|Shamrock)\d+/gi,
-        "",
-      )
-      .replace(/\s+/g, " ")
-      .trim();
-  };
-
-  const message = cleanupCheerMessage(event.message);
-  const { bits } = event;
-  const color =
-    bits >= 10_000
-      ? "#FE2C2D"
-      : bits >= 5_000
-        ? "#4FAFFC"
-        : bits >= 1_000
-          ? "#47D7B3"
-          : bits >= 100
-            ? "#C982FC"
-            : "#CCC9D0";
-
   return (
     <div
       className={clsx({
-        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
+        "relative flex h-[100px] items-center justify-between bg-black/80 px-8 backdrop-blur-sm":
           true,
         "border border-border": true,
         [className]: true,
@@ -292,199 +78,41 @@ export const CheerNotification: React.FC<CheerNotificationProps> = ({
       style={{ borderLeftColor: color }}
       {...props}
     >
-      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
-        <BrandedDots className="absolute inset-0" style={{ color }} />
-        <Confetti className="absolute inset-0" />
-      </div>
-
-      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
-        <div className="h-[54px] w-[49px]">
-          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
-            {formatBigNumber(bits)}
+      {notification.count && (
+        <>
+          <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
+            <BrandedDots className="absolute inset-0" />
+            <Confetti className="absolute inset-0" />
           </div>
-          <div className="text-xl uppercase">bits</div>
-        </div>
-      </div>
+          <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
+            <div className="h-[54px] w-[49px]">
+              <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
+                {formatBigNumber(notification.count)}
+              </div>
+              <div className="text-xl uppercase">{notification.countLabel}</div>
+            </div>
+          </div>
+        </>
+      )}
       <div>
         <div
           className="text-xs font-semibold uppercase tracking-[0.02em]"
           style={{ color }}
         >
-          Cheer!
+          {notification.title}
         </div>
         <div className="text-lg font-normal text-white">
-          {event.userDisplayName ? `@${event.userDisplayName}` : "(anonymous)"}
+          {notification.body}
         </div>
-        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
-          {message}
-        </div>
+        {notification.note && (
+          <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
+            {notification.note}
+          </div>
+        )}
       </div>
+      {!notification.count && <Ticker />}
     </div>
   );
-};
-
-type TwitchChannelSubscriptionGiftEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.channel.subscription.gift" }
->["properties"];
-export interface SubscriptionGiftNotificationProps
-  extends React.ComponentProps<"div"> {
-  event: TwitchChannelSubscriptionGiftEvent;
-}
-
-export const SubscriptionGiftNotification: React.FC<
-  SubscriptionGiftNotificationProps
-> = ({ event, className = "", ...props }) => {
-  useEffect(() => {
-    try {
-      giftSubAlert?.play();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  return (
-    <div
-      className={clsx({
-        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
-          true,
-        "border border-border border-l-sky": true,
-        [className]: true,
-      })}
-      {...props}
-    >
-      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
-        <BrandedDots className="absolute inset-0 text-sky" />
-        <Confetti className="absolute inset-0" />
-      </div>
-
-      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
-        <div className="h-[54px] w-[49px]">
-          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
-            {event.amount}
-          </div>
-          <div className="text-xl uppercase">subs</div>
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.02em] text-sky">
-          Subscription Gift
-        </div>
-        <div className="text-lg font-normal text-white">
-          {event.gifterDisplayName
-            ? `@${event.gifterDisplayName}`
-            : "(anonymous)"}
-        </div>
-        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
-          {`Gifted ${event.amount}x Tier ${event.tier[0]} subs!`}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type TwitchChannelRaidEvent = Extract<
-  TwitchEvent,
-  { type: "twitch.channel.raid" }
->["properties"];
-export interface RaidNotificationProps extends React.ComponentProps<"div"> {
-  event: TwitchChannelRaidEvent;
-}
-
-export const RaidNotification: React.FC<RaidNotificationProps> = ({
-  event,
-  className = "",
-  ...props
-}) => {
-  useEffect(() => {
-    try {
-      raidAlert?.play();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  return (
-    <div
-      className={clsx({
-        "relative flex h-[100px] items-center justify-between border-l bg-black/80 px-8 backdrop-blur-sm":
-          true,
-        "border border-border border-l-amber": true,
-        [className]: true,
-      })}
-      {...props}
-    >
-      <div className="absolute inset-y-0 right-0 h-full w-[191px] gradient-mask-l-30">
-        <BrandedDots className="absolute inset-0 text-amber" />
-        <Confetti className="absolute inset-0" />
-      </div>
-
-      <div className="absolute inset-y-0 right-[24px] flex items-center overflow-visible text-center font-bebas font-normal text-white">
-        <div className="h-[54px] w-[49px]">
-          <div className="-ml-[100%] -mr-[100%] mt-2 text-[40px] leading-6">
-            {event.viewers}
-          </div>
-          <div className="text-xl uppercase">
-            {event.viewers === 1 ? "viewer" : "viewers"}
-          </div>
-        </div>
-      </div>
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.02em] text-amber">
-          Incoming Raid
-        </div>
-        <div className="text-lg font-normal text-white">
-          @{event.raidingBroadcasterDisplayName}
-        </div>
-        <div className="mt-1 w-[200px] truncate text-xs font-semibold text-mauve-11">
-          {`Raiding with a party of ${event.viewers}!`}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export interface NotificationProps extends React.ComponentProps<"div"> {
-  notification: TwitchEvent;
-}
-
-export const Notification: React.FC<NotificationProps> = ({
-  notification,
-  ...props
-}) => {
-  switch (notification.type) {
-    case "twitch.channel.follow":
-      return (
-        <FollowerNotification event={notification.properties} {...props} />
-      );
-    case "twitch.channel.subscribe":
-      return (
-        <SubscriberNotification event={notification.properties} {...props} />
-      );
-    case "terminal-sale":
-      return <GenericNotification event={notification} {...props} />;
-    case "twitch.reward.redeem":
-      return (
-        <RewardRedemptionNotification
-          event={notification.properties}
-          {...props}
-        />
-      );
-    case "twitch.channel.cheer":
-      return <CheerNotification event={notification.properties} {...props} />;
-    case "twitch.channel.subscription.gift":
-      return (
-        <SubscriptionGiftNotification
-          event={notification.properties}
-          {...props}
-        />
-      );
-    case "twitch.channel.raid":
-      return <RaidNotification event={notification.properties} {...props} />;
-
-    default:
-      return null;
-  }
 };
 
 const BrandedDots: React.FC<React.ComponentProps<"svg">> = ({

@@ -1,3 +1,4 @@
+import { hasFace } from "@/lib/video";
 import {
   Face,
   FaceLandmarksDetector,
@@ -34,6 +35,8 @@ export const useHeadPosition = () => {
       const video = videoRef.current;
       if (!video) return;
 
+      detector = await (await import("../lib/detector")).createDetector();
+
       const cameras = await navigator.mediaDevices.enumerateDevices();
       const camlinkCameras = cameras.filter(
         (camera) =>
@@ -41,12 +44,15 @@ export const useHeadPosition = () => {
           camera.label.startsWith("Cam Link 4K"),
       );
 
-      const desiredCamera =
-        camlinkCameras.find(
-          (c) =>
-            c.deviceId ===
-            "93752c9b92658040bf7fd0e21a9c3e92ac0bc371526b31503a264676e89072e3",
-        ) || camlinkCameras[0];
+      let desiredCamera: MediaDeviceInfo | undefined = undefined;
+      for (const camera of camlinkCameras) {
+        if (await hasFace(camera, video, detector)) {
+          desiredCamera = camera;
+          break;
+        }
+      }
+
+      console.log({ desiredCamera });
 
       const userMedia = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -58,9 +64,9 @@ export const useHeadPosition = () => {
 
       video.srcObject = userMedia;
       video.onloadeddata = () => setLoaded(true);
-      video.play();
-
-      detector = await (await import("../lib/detector")).createDetector();
+      setTimeout(async () => {
+        await video.play();
+      }, 100);
     }
 
     init();

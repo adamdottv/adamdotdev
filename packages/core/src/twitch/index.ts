@@ -7,6 +7,7 @@ import { EventSubWsListener } from "@twurple/eventsub-ws";
 import { Resource } from "sst";
 import { Rewards as _Rewards } from "./rewards";
 import { Stream as _Stream } from "./stream";
+import { Notifications as _Notifications } from "./notifications";
 
 export module Twitch {
   export const Events = {
@@ -184,6 +185,7 @@ export module Twitch {
   export const UserName = "adamdotdev";
   export const Rewards = _Rewards;
   export const Stream = _Stream;
+  export const Notifications = _Notifications;
 
   export module Client {
     export async function api() {

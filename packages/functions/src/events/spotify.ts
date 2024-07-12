@@ -1,6 +1,6 @@
 import { bus } from "sst/aws/bus";
 import { Spotify } from "@adamdotdev/core/spotify/index";
-import { Realtime } from "@adamdotdev/core/overlays/realtime";
+import { Realtime } from "@adamdotdev/core/live/realtime";
 
 export const handler = bus.subscriber([...Spotify.AllEvents], async (event) => {
   console.log("event", event);

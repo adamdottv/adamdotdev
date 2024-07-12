@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "@neondatabase/serverless": "^0.9.3",
-    "@types/luxon": "3.4.2"
+    "@types/luxon": "3.4.2",
+    "@types/uuid": "^10.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.588.0",
@@ -35,6 +36,7 @@
     "nanoid": "5.0.7",
     "remeda": "1.61.0",
     "stripe": "^16.1.0",
+    "uuid": "^10.0.0",
     "zod": "3.23.8"
   }
 }

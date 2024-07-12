@@ -1,5 +1,19 @@
 import { z } from "zod";
 
+export const Notification = z.object({
+  id: z.string(),
+  title: z.string(),
+  body: z.string(),
+  note: z.string().optional(),
+  color: z.string().optional(),
+  sound: z
+    .enum(["nope", "tada1", "tada2", "tada3", "tada4", "tada5"])
+    .optional(),
+  count: z.number().optional(),
+  countLabel: z.string().optional(),
+});
+export type Notification = z.infer<typeof Notification>;
+
 export const Scene = z.object({
   name: z.enum([
     "Init",

@@ -1,51 +1,31 @@
 "use client";
 
-import type { TwitchEvent } from "@adamdotdev/functions/events/twitch";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import { useQueue } from "@/hooks/use-queue";
-import hash from "object-hash";
-import { Notification } from "@/components/notification";
-import { useTopic } from "@/hooks/use-topic";
+import { NotificationComponent } from "@/components/notification";
+import { useEvent } from "@/hooks/use-event";
+import { Notification } from "@adamdotdev/core/schema";
 
 const MAX_NOTIFICATIONS = 3;
 const NOTIFICATION_DURATION = 3;
 const NOTIFICATION_PANEL_HEIGHT = MAX_NOTIFICATIONS * 100 + 65;
 
 export default function Notifications() {
-  const [_, setNotifications, notifications, previous] = useQueue<
-    TwitchEvent & { key: string }
-  >({
-    count: MAX_NOTIFICATIONS,
-    timeout: NOTIFICATION_DURATION * 1000,
-  });
-
-  const handleTwitchEvent = (twitchEvent: TwitchEvent) => {
-    const validTypes: TwitchEvent["type"][] = [
-      "twitch.channel.follow",
-      "twitch.channel.subscribe",
-      "twitch.channel.cheer",
-      "twitch.channel.subscription.gift",
-      "twitch.channel.raid",
-      "twitch.reward.redeem",
-      "terminal-sale",
-    ];
-    if (!validTypes.includes(twitchEvent.type)) return;
-
-    const key = hash(twitchEvent);
-    const event = { ...twitchEvent, key };
-    setNotifications((n) => [...n, event]);
-  };
-
-  useTopic<TwitchEvent>(
-    process.env.NEXT_PUBLIC_REALTIME_NOTIFICATIONS_TOPIC as string,
-    "notifications",
-    handleTwitchEvent,
+  const [_, setNotifications, notifications, previous] = useQueue<Notification>(
+    {
+      count: MAX_NOTIFICATIONS,
+      timeout: NOTIFICATION_DURATION * 1000,
+    },
   );
+
+  useEvent("live.notification", (evt) => {
+    setNotifications((n) => [...n, evt.properties]);
+  });
 
   const notificationsWithPrevious = [previous, ...(notifications || [])].filter(
     (notification) => !!notification,
-  ) as (TwitchEvent & { key: string })[];
+  );
 
   return (
     <ul
@@ -59,7 +39,7 @@ export default function Notifications() {
       <AnimatePresence initial={false}>
         {notificationsWithPrevious?.map((notification) => (
           <motion.li
-            key={notification.key}
+            key={notification!.id}
             layout="position"
             initial={{ opacity: 0.33, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,7 +55,7 @@ export default function Notifications() {
               transition: { duration: 0.33, ease: "anticipate" },
             }}
           >
-            <Notification notification={notification} />
+            <NotificationComponent notification={notification!} />
           </motion.li>
         ))}
       </AnimatePresence>

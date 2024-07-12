@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { OBS } from "@adamdotdev/core/overlays/obs";
+import { OBS } from "@adamdotdev/core/live/obs";
 
 export module ZoomApi {
   export const route = new Hono()

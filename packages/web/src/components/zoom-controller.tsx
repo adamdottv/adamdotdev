@@ -6,6 +6,7 @@ import React from "react";
 
 export default function ZoomController({ dev }: { dev?: boolean }) {
   const { lookingAtScreen, videoRef } = useHeadPosition();
+  console.log({ lookingAtScreen });
 
   let zoomTimer: NodeJS.Timeout | undefined;
   React.useEffect(() => {

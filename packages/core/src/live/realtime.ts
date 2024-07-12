@@ -5,7 +5,7 @@ import {
 import { Resource } from "sst";
 import { z } from "zod";
 import { fn } from "../util/fn";
-import { Scene, SpotifyInfo, StreamInfo } from "../schema";
+import { Notification, Scene, SpotifyInfo, StreamInfo } from "../schema";
 
 const realtimeClient = new IoTDataPlaneClient();
 
@@ -13,6 +13,10 @@ export module Realtime {
   export const Topic = `${Resource.App.name}/${Resource.App.stage}/live`;
 
   export const Events = {
+    Notification: z.object({
+      type: z.literal("live.notification"),
+      properties: Notification,
+    }),
     TransitionStarted: z.object({
       type: z.literal("live.transition.started"),
       properties: z.object({
@@ -69,6 +73,7 @@ export module Realtime {
   export const AllEvents = Object.values(Events);
 
   export const LiveEvent = z.discriminatedUnion("type", [
+    Events.Notification,
     Events.TransitionStarted,
     Events.TransitionEnded,
     Events.FadeAudioIn,

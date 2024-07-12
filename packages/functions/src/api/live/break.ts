@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { Live } from "@adamdotdev/core/overlays/index";
+import { Live } from "@adamdotdev/core/live/index";
 
 export module BreakApi {
   export const route = new Hono()

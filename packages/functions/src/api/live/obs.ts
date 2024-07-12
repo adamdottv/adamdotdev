@@ -1,4 +1,4 @@
-import { OBS } from "@adamdotdev/core/overlays/obs";
+import { OBS } from "@adamdotdev/core/live/obs";
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
