@@ -24,7 +24,7 @@ export class SpotifyController {
 
   PLAYING_TIMEOUT = 1000 * 2;
   ERROR_TIMEOUT = 1000 * 5;
-  IDLE_TIMEOUT = 1000 * 60 * 1;
+  IDLE_TIMEOUT = 1000 * 10 * 1;
 
   async sync() {
     if (this.timer) clearTimeout(this.timer);
