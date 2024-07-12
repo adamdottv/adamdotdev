@@ -18,8 +18,8 @@ RUN bun build ./src/index.ts --target=bun --outdir=./dist --sourcemap --external
 FROM oven/bun:slim
 
 WORKDIR /app
-COPY --from=builder /app/node_modules/@aws-sdk/client-iot-data-plane /app/dist/node_modules/@aws-sdk/client-iot-data-plane
 COPY --from=builder /app/packages/service/dist /app/dist
+RUN bun install @aws-sdk/client-iot-data-plane
 
 WORKDIR /app
 CMD ["bun", "run", "./dist/index.js"]
