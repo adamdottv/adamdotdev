@@ -1,6 +1,6 @@
 import { database } from "./database";
 import { domain, zone } from "./dns";
-import { bus } from "./events";
+import { bus } from "./bus";
 import { secret } from "./secret";
 
 export const vpc = new sst.aws.Vpc("Vpc");

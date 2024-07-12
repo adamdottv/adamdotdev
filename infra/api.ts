@@ -1,6 +1,6 @@
 import { database } from "./database";
 import { domain } from "./dns";
-import { bus } from "./events";
+import { bus } from "./bus";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
 import { webhook } from "./stripe";

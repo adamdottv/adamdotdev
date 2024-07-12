@@ -1,9 +1,9 @@
+import { bus } from "./bus";
 import { service } from "./cluster";
 import { database } from "./database";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
 
-export const bus = new sst.aws.Bus("Bus");
 bus.subscribe(
   {
     handler: "packages/functions/src/events/twitch.handler",
