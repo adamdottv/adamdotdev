@@ -24,9 +24,9 @@ export const service = cluster.addService("Service", {
   link: [
     database,
     secret.ApiKey,
+    secret.ObsPassword,
     ...Object.values(secret.Twitch),
     ...Object.values(secret.Spotify),
-    secret.ObsPassword,
     bus,
     obsWebsocket,
   ],
