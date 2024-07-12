@@ -27,4 +27,20 @@ export default $config({
     }
     return outputs;
   },
+  console: {
+    autodeploy: {
+      target(event) {
+        if (
+          event.type === "branch" &&
+          event.action === "pushed" &&
+          event.branch === "main"
+        ) {
+          return {
+            stage: "production",
+            // runner: { engine: "codebuild", compute: "large" },
+          };
+        }
+      },
+    },
+  },
 });
