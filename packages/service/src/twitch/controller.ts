@@ -49,7 +49,7 @@ export class TwitchController {
 
       switch (randomEventType) {
         case Twitch.Events.ChannelFollow:
-          bus.publish(Resource.Bus, Twitch.Events.ChannelFollow, {
+          const followEvent = {
             broadcasterId: Twitch.UserId,
             broadcasterName: "adamdotdev",
             broadcasterDisplayName: "adamdotdev",
@@ -57,10 +57,12 @@ export class TwitchController {
             userName: "john_doe",
             userDisplayName: "John Doe",
             followDate: new Date(),
-          });
+          };
+          bus.publish(Resource.Bus, Twitch.Events.ChannelFollow, followEvent);
+          bus.publish(Resource.Bus, Twitch.Events.ChannelFollow, followEvent);
           break;
         case Twitch.Events.ChannelSubscribe:
-          bus.publish(Resource.Bus, Twitch.Events.ChannelSubscribe, {
+          const subscribeEvent = {
             broadcasterId: Twitch.UserId,
             broadcasterName: "adamdotdev",
             broadcasterDisplayName: "adamdotdev",
@@ -69,10 +71,20 @@ export class TwitchController {
             userDisplayName: "John Doe",
             tier: "1",
             isGift: false,
-          });
+          };
+          bus.publish(
+            Resource.Bus,
+            Twitch.Events.ChannelSubscribe,
+            subscribeEvent,
+          );
+          bus.publish(
+            Resource.Bus,
+            Twitch.Events.ChannelSubscribe,
+            subscribeEvent,
+          );
           break;
         case Twitch.Events.RewardRedeem:
-          bus.publish(Resource.Bus, Twitch.Events.RewardRedeem, {
+          const redeemEvent = {
             id: "123456",
             status: "done",
             input: "Test Input",
@@ -87,10 +99,12 @@ export class TwitchController {
             rewardTitle: "Fake Reward",
             rewardPrompt: "Fake Reward Prompt",
             redemptionDate: new Date(),
-          });
+          };
+          bus.publish(Resource.Bus, Twitch.Events.RewardRedeem, redeemEvent);
+          bus.publish(Resource.Bus, Twitch.Events.RewardRedeem, redeemEvent);
           break;
         case Twitch.Events.ChannelSubscriptionGift:
-          bus.publish(Resource.Bus, Twitch.Events.ChannelSubscriptionGift, {
+          const giftEvent = {
             broadcasterId: Twitch.UserId,
             broadcasterName: "adamdotdev",
             broadcasterDisplayName: "adamdotdev",
@@ -101,10 +115,20 @@ export class TwitchController {
             amount: randomItem([1, 10, 100, 1000]),
             cumulativeAmount: 100,
             isAnonymous: false,
-          });
+          };
+          bus.publish(
+            Resource.Bus,
+            Twitch.Events.ChannelSubscriptionGift,
+            giftEvent,
+          );
+          bus.publish(
+            Resource.Bus,
+            Twitch.Events.ChannelSubscriptionGift,
+            giftEvent,
+          );
           break;
         case Twitch.Events.ChannelCheer:
-          bus.publish(Resource.Bus, Twitch.Events.ChannelCheer, {
+          const cheerEvent = {
             broadcasterId: Twitch.UserId,
             broadcasterName: "adamdotdev",
             broadcasterDisplayName: "adamdotdev",
@@ -114,10 +138,12 @@ export class TwitchController {
             message: "Test Message",
             bits: randomItem([100, 500, 1500, 15000]),
             isAnonymous: false,
-          });
+          };
+          bus.publish(Resource.Bus, Twitch.Events.ChannelCheer, cheerEvent);
+          bus.publish(Resource.Bus, Twitch.Events.ChannelCheer, cheerEvent);
           break;
         case Twitch.Events.ChannelRaid:
-          bus.publish(Resource.Bus, Twitch.Events.ChannelRaid, {
+          const raidEvent = {
             raidedBroadcasterId: Twitch.UserId,
             raidedBroadcasterName: "adamdotdev",
             raidedBroadcasterDisplayName: "adamdotdev",
@@ -125,7 +151,9 @@ export class TwitchController {
             raidingBroadcasterName: "jane_doe",
             raidingBroadcasterDisplayName: "Jane Doe",
             viewers: randomItem([1, 10, 100, 1000]),
-          });
+          };
+          bus.publish(Resource.Bus, Twitch.Events.ChannelRaid, raidEvent);
+          bus.publish(Resource.Bus, Twitch.Events.ChannelRaid, raidEvent);
           break;
       }
     }, 1000 * 5);

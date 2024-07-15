@@ -4,22 +4,18 @@ import {
   SecretsManagerClient,
 } from "@aws-sdk/client-secrets-manager";
 import { Resource } from "sst";
+import { EntityItem } from "electrodb";
 import { AccessToken, Devices, PlaybackState } from "./types";
 import { fn } from "../util/fn";
 import { z } from "zod";
 import { delay } from "../util";
 import { event } from "../event";
-import {
-  afterTx,
-  createTransaction,
-  useTransaction,
-} from "../drizzle/transaction";
-import { spotifyTable } from "./spotify.sql";
-import { eq, sql } from "drizzle-orm";
 import { bus } from "sst/aws/bus";
 import { SpotifyInfo } from "../schema";
+import { spotifyEntity } from "./spotify.ddb";
 
 export module Spotify {
+  export const Entity = spotifyEntity;
   export const Events = {
     PlaybackStarted: event("spotify.playback.started", SpotifyInfo),
     PlaybackPaused: event("spotify.playback.paused", SpotifyInfo),
@@ -45,19 +41,16 @@ export module Spotify {
     return device?.id;
   };
 
-  const id = "adams-spotify";
   export const get = () =>
-    useTransaction((tx) =>
-      tx
-        .select()
-        .from(spotifyTable)
-        .where(eq(spotifyTable.id, id))
-        .then((r) => r.map(serialize).at(0)),
-    );
+    spotifyEntity
+      .get({ user: "adamdotdev" })
+      .go()
+      .then((r) => (r.data ? serialize(r.data) : undefined));
 
   export const sync = async () => {
     const previous = await get();
     const current = await state().then((state) => ({
+      user: "adamdotdev",
       playing: state?.is_playing ?? false,
       shuffle: state?.shuffle_state,
       repeat: state?.repeat_state,
@@ -74,37 +67,19 @@ export module Spotify {
       volume: state?.device.volume_percent ?? undefined,
     }));
 
-    return createTransaction(async (tx) => {
-      try {
-        await tx
-          .insert(spotifyTable)
-          .values({ id, timeUpdated: sql`now()`, ...current })
-          .onConflictDoUpdate({
-            target: [spotifyTable.id],
-            set: current,
-          });
-      } catch (error) {
-        console.error(error);
-      }
+    await spotifyEntity.put(current).go();
 
-      if (!previous?.playing && current.playing) {
-        await afterTx(() =>
-          bus.publish(Resource.Bus, Events.PlaybackStarted, current),
-        );
-      }
-      if (previous?.playing && !current.playing) {
-        await afterTx(() =>
-          bus.publish(Resource.Bus, Events.PlaybackPaused, current),
-        );
-      }
-      if (previous?.title !== current.title) {
-        await afterTx(() =>
-          bus.publish(Resource.Bus, Events.TrackChanged, current),
-        );
-      }
+    if (!previous?.playing && current.playing) {
+      await bus.publish(Resource.Bus, Events.PlaybackStarted, current);
+    }
+    if (previous?.playing && !current.playing) {
+      await bus.publish(Resource.Bus, Events.PlaybackPaused, current);
+    }
+    if (previous?.title !== current.title) {
+      await bus.publish(Resource.Bus, Events.TrackChanged, current);
+    }
 
-      return current;
-    });
+    return current;
   };
 
   const state = async () => {
@@ -283,7 +258,7 @@ export module Spotify {
   };
 
   function serialize(
-    input: typeof spotifyTable.$inferSelect,
+    input: EntityItem<typeof spotifyEntity>,
   ): z.infer<typeof SpotifyInfo> {
     return {
       playing: input.playing || false,

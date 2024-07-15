@@ -5,6 +5,7 @@ import { realtime } from "./realtime";
 import { secret } from "./secret";
 import { webhook } from "./stripe";
 import { service } from "./cluster";
+import { table } from "./table";
 
 const api = new sst.aws.Function("Api", {
   url: true,
@@ -12,6 +13,7 @@ const api = new sst.aws.Function("Api", {
   link: [
     bus,
     database,
+    table,
     secret.ApiKey,
     secret.Twitch.UserId,
     secret.Twitch.ClientId,

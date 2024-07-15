@@ -2,6 +2,7 @@ import { database } from "./database";
 import { domain, zone } from "./dns";
 import { bus } from "./bus";
 import { secret } from "./secret";
+import { table } from "./table";
 
 export const vpc = new sst.aws.Vpc("Vpc");
 export const cluster = new sst.aws.Cluster("Cluster", { vpc });
@@ -23,6 +24,7 @@ export const service = cluster.addService("Service", {
   image: { dockerfile: "packages/service/Dockerfile" },
   link: [
     database,
+    table,
     secret.ApiKey,
     secret.ObsPassword,
     ...Object.values(secret.Twitch),

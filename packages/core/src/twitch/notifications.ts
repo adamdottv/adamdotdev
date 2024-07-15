@@ -1,8 +1,7 @@
 import { bus } from "sst/aws/bus";
-import { Realtime } from "../live/realtime";
 import { Twitch } from ".";
 import { event } from "sst/event";
-import { v4 as uuid } from "uuid";
+import { Notification } from "../notification";
 
 type TwitchEvent<T extends event.Definition> = Parameters<
   Parameters<typeof bus.subscriber<T>>[1]
@@ -15,41 +14,23 @@ type GiftEvent = TwitchEvent<typeof Twitch.Events.ChannelSubscriptionGift>;
 type CheerEvent = TwitchEvent<typeof Twitch.Events.ChannelCheer>;
 type RaidEvent = TwitchEvent<typeof Twitch.Events.ChannelRaid>;
 
-// terminal: "#FF5C00",
-// statmuse: "#00C1D8",
-// proaws: "#F28F5A",
-// tomorrow: "#EBFF63",
-// crimson: "#F76190",
-// recording: "#FF6363",
-// lime: "#C4F042",
-// mint: "#25D0AB",
-// purple: "#8e4ec6",
-// sky: "#68ddfd",
-// amber: "#ffb224",
-
 export module Notifications {
   export async function follower(event: FollowerEvent) {
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: "New Follower",
-        body: event.properties.userDisplayName,
-        color: "#C4F042", // lime
-      },
+    await Notification.create({
+      externalID: new Date().toLocaleDateString(),
+      title: "New Follower",
+      body: event.properties.userDisplayName,
+      color: "#C4F042", // lime
     });
   }
 
   export async function subscriber(event: SubscriberEvent) {
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: `Tier ${event.properties.tier[0]} Subscriber`,
-        body: event.properties.userDisplayName,
-        color: "#F76190", // crimson
-        sound: "tada4",
-      },
+    await Notification.create({
+      externalID: new Date().toLocaleDateString(),
+      title: `Tier ${event.properties.tier[0]} Subscriber`,
+      body: event.properties.userDisplayName,
+      color: "#F76190", // crimson
+      sound: "tada4",
     });
   }
 
@@ -61,18 +42,15 @@ export module Notifications {
           ? "#25D0AB" // mint
           : "#FFC34E"; // amber
 
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: "Reward Redeemed",
-        body: event.properties.userDisplayName,
-        note: event.properties.rewardTitle,
-        count: event.properties.rewardCost,
-        countLabel: event.properties.rewardCost === 1 ? "point" : "points",
-        sound: "nope",
-        color,
-      },
+    await Notification.create({
+      externalID: event.properties.id,
+      title: "Reward Redeemed",
+      body: event.properties.userDisplayName,
+      note: event.properties.rewardTitle,
+      count: event.properties.rewardCost,
+      countLabel: event.properties.rewardCost === 1 ? "point" : "points",
+      sound: "nope",
+      color,
     });
   }
 
@@ -100,50 +78,45 @@ export module Notifications {
               ? "#C982FC"
               : "#CCC9D0";
 
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: "Cheer!",
-        body: event.properties.userDisplayName ?? "(anonymous)",
-        note: message,
-        count: event.properties.bits,
-        countLabel: event.properties.bits === 1 ? "bit" : "bits",
-        sound: "tada1",
-        color,
-      },
+    await Notification.create({
+      externalID: new Date().toLocaleDateString(),
+      title: "Cheer!",
+      body: event.properties.userDisplayName ?? "(anonymous)",
+      note: message,
+      count: event.properties.bits,
+      countLabel: event.properties.bits === 1 ? "bit" : "bits",
+      sound: "tada1",
+      color,
     });
   }
 
   export async function gift(event: GiftEvent) {
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: "Subscription Gift",
-        body: event.properties.gifterDisplayName ?? "(anonymous)",
-        note: `Gifted ${event.properties.amount}x Tier ${event.properties.tier[0]} subs!`,
-        count: event.properties.amount,
-        countLabel: event.properties.amount === 1 ? "sub" : "subs",
-        color: "#68DDFD", // sky
-        sound: "tada3",
-      },
+    const gifter =
+      event.properties.gifterId ?? event.properties.gifterName ?? "anonymous";
+    const externalID = gifter + event.properties.cumulativeAmount?.toString();
+
+    await Notification.create({
+      externalID,
+      title: "Subscription Gift",
+      body: event.properties.gifterDisplayName ?? "(anonymous)",
+      note: `Gifted ${event.properties.amount}x Tier ${event.properties.tier[0]} subs!`,
+      count: event.properties.amount,
+      countLabel: event.properties.amount === 1 ? "sub" : "subs",
+      color: "#68DDFD", // sky
+      sound: "tada3",
     });
   }
 
   export async function raid(event: RaidEvent) {
-    await Realtime.push({
-      type: "live.notification",
-      properties: {
-        id: uuid(),
-        title: "Incoming Raid",
-        body: event.properties.raidingBroadcasterDisplayName,
-        note: `Raiding with a party of ${event.properties.viewers}!`,
-        count: event.properties.viewers,
-        countLabel: event.properties.viewers === 1 ? "viewer" : "viewers",
-        color: "#FFB224", // amber
-        sound: "tada2",
-      },
+    await Notification.create({
+      externalID: new Date().toLocaleDateString(),
+      title: "Incoming Raid",
+      body: event.properties.raidingBroadcasterDisplayName,
+      note: `Raiding with a party of ${event.properties.viewers}!`,
+      count: event.properties.viewers,
+      countLabel: event.properties.viewers === 1 ? "viewer" : "viewers",
+      color: "#FFB224", // amber
+      sound: "tada2",
     });
   }
 }

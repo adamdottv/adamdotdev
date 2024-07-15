@@ -3,12 +3,14 @@ import { service } from "./cluster";
 import { database } from "./database";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
+import { table } from "./table";
 
 bus.subscribe(
   {
     handler: "packages/functions/src/events/twitch.handler",
     link: [
       database,
+      table,
       realtime,
       secret.ObsPassword,
       service,
@@ -23,11 +25,13 @@ bus.subscribe(
     },
   },
 );
+
 bus.subscribe(
   {
     handler: "packages/functions/src/events/obs.handler",
     link: [
       database,
+      table,
       realtime,
       secret.ObsPassword,
       service,
@@ -42,11 +46,13 @@ bus.subscribe(
     },
   },
 );
+
 bus.subscribe(
   {
     handler: "packages/functions/src/events/spotify.handler",
     link: [
       database,
+      table,
       realtime,
       secret.ObsPassword,
       ...Object.values(secret.Twitch),
@@ -58,5 +64,26 @@ bus.subscribe(
     pattern: {
       detailType: [{ prefix: { "equals-ignore-case": "spotify." } }],
     },
+  },
+);
+
+table.subscribe(
+  {
+    handler: "packages/functions/src/events/notification.handler",
+    link: [table, realtime, bus],
+    permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+  },
+  {
+    filters: [
+      {
+        dynamodb: {
+          NewImage: {
+            __edb_e__: {
+              S: ["notification"],
+            },
+          },
+        },
+      },
+    ],
   },
 );

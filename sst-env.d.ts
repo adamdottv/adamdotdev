@@ -65,6 +65,10 @@ declare module "sst" {
       type: "sst.sst.Secret"
       value: string
     }
+    Table: {
+      name: string
+      type: "sst.aws.Dynamo"
+    }
     TerminalStripeSecret: {
       type: "sst.sst.Secret"
       value: string

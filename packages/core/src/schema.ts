@@ -11,6 +11,7 @@ export const Notification = z.object({
     .optional(),
   count: z.number().optional(),
   countLabel: z.string().optional(),
+  externalID: z.string().optional(),
 });
 export type Notification = z.infer<typeof Notification>;
 

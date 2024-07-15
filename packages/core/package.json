@@ -13,18 +13,19 @@
     "db:reset": "sst shell ../scripts/db-reset"
   },
   "devDependencies": {
-    "@neondatabase/serverless": "^0.9.3",
     "@types/luxon": "3.4.2",
     "@types/uuid": "^10.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.588.0",
+    "@aws-sdk/client-dynamodb": "^3.614.0",
     "@aws-sdk/client-iot-data-plane": "^3.598.0",
     "@aws-sdk/client-rds-data": "3.577.0",
     "@aws-sdk/client-s3": "^3.583.0",
     "@aws-sdk/client-secrets-manager": "^3.598.0",
     "@aws-sdk/client-sesv2": "^3.577.0",
     "@aws-sdk/credential-providers": "3.577.0",
+    "@aws-sdk/lib-dynamodb": "^3.614.0",
     "@aws-sdk/s3-request-presigner": "^3.583.0",
     "@twurple/api": "^7.0.3",
     "@twurple/auth": "^7.0.3",
@@ -32,8 +33,10 @@
     "@twurple/eventsub-ws": "^7.0.3",
     "drizzle-kit": "0.21.1",
     "drizzle-orm": "0.30.10",
+    "electrodb": "^2.14.2",
     "luxon": "3.4.4",
     "nanoid": "5.0.7",
+    "object-hash": "^3.0.0",
     "remeda": "1.61.0",
     "stripe": "^16.1.0",
     "uuid": "^10.0.0",
