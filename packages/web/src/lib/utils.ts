@@ -33,6 +33,7 @@ export const songs = [
   "theme-sonic.wav",
   "theme-rtj.wav",
   "theme-mellow.wav",
+  "theme-ozarks.wav",
   // "theme-horror.wav",
 ];
 
