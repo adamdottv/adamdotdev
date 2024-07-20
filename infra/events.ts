@@ -17,7 +17,10 @@ bus.subscribe(
       ...Object.values(secret.Twitch),
       ...Object.values(secret.Spotify),
     ],
-    permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+    permissions: [
+      { actions: ["iot:*"], resources: ["*"] },
+      { actions: ["secretsmanager:*"], resources: ["*"] },
+    ],
   },
   {
     pattern: {
@@ -38,7 +41,10 @@ bus.subscribe(
       ...Object.values(secret.Twitch),
       ...Object.values(secret.Spotify),
     ],
-    permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+    permissions: [
+      { actions: ["iot:*"], resources: ["*"] },
+      { actions: ["secretsmanager:*"], resources: ["*"] },
+    ],
   },
   {
     pattern: {
@@ -58,7 +64,10 @@ bus.subscribe(
       ...Object.values(secret.Twitch),
       ...Object.values(secret.Spotify),
     ],
-    permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+    permissions: [
+      { actions: ["iot:*"], resources: ["*"] },
+      { actions: ["secretsmanager:*"], resources: ["*"] },
+    ],
   },
   {
     pattern: {
@@ -71,7 +80,10 @@ table.subscribe(
   {
     handler: "packages/functions/src/events/notification.handler",
     link: [table, realtime, bus],
-    permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+    permissions: [
+      { actions: ["iot:*"], resources: ["*"] },
+      { actions: ["secretsmanager:*"], resources: ["*"] },
+    ],
   },
   {
     filters: [

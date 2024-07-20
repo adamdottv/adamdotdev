@@ -28,7 +28,10 @@ const api = new sst.aws.Function("Api", {
     realtime,
     service,
   ],
-  permissions: [{ actions: ["iot:*"], resources: ["*"] }],
+  permissions: [
+    { actions: ["iot:*"], resources: ["*"] },
+    { actions: ["secretsmanager:*"], resources: ["*"] },
+  ],
   handler: "./packages/functions/src/api/index.handler",
 });
 

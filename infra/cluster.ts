@@ -32,5 +32,8 @@ export const service = cluster.addService("Service", {
     bus,
     obsWebsocket,
   ],
-  permissions: [{ actions: ["events:*"], resources: ["*"] }],
+  permissions: [
+    { actions: ["events:*"], resources: ["*"] },
+    { actions: ["secretsmanager:*"], resources: ["*"] },
+  ],
 });
