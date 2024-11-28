@@ -1,4 +1,4 @@
-import { database } from "./database";
+// import { database } from "./database";
 import { domain } from "./dns";
 import { bus } from "./bus";
 import { realtime } from "./realtime";
@@ -12,7 +12,7 @@ const api = new sst.aws.Function("Api", {
   streaming: !$dev,
   link: [
     bus,
-    database,
+    // database,
     table,
     secret.ApiKey,
     secret.Twitch.UserId,
