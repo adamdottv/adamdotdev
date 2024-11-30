@@ -3,7 +3,7 @@ import { domain } from "./dns";
 import { bus } from "./bus";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
-// import { webhook } from "./stripe";
+import { webhook } from "./stripe";
 // import { service } from "./cluster";
 import { table } from "./table";
 
@@ -24,7 +24,7 @@ const api = new sst.aws.Function("Api", {
     secret.Spotify.ClientSecret,
     secret.Spotify.RefreshToken,
     secret.Spotify.AccessToken,
-    // webhook,
+    webhook,
     realtime,
     // service,
   ],

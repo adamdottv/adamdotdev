@@ -10,14 +10,14 @@ import TomorrowBackground from "@/components/tomorrow-background";
 import TerminalBackground from "@/components/terminal-background";
 import OfficeBackground from "@/components/office-background";
 import Swipeable from "@/components/swipeable";
-import LiveBanner from "@/components/live-banner";
+// import LiveBanner from "@/components/live-banner";
 import { shuffle, songs } from "@/lib/utils";
-import { getLivestream } from "./actions";
+// import { getLivestream } from "./actions";
 
 export default async function LandingPage() {
   const playlist = shuffle(songs.map((s) => s.replace(".wav", ".mp3")));
-  const livestream = await getLivestream();
-  const live = typeof livestream === "string" ? false : livestream.live;
+  // const livestream = await getLivestream();
+  // const live = typeof livestream === "string" ? false : livestream.live;
 
   return (
     <main className="relative h-screen overflow-y-hidden">
@@ -147,7 +147,7 @@ export default async function LandingPage() {
           </div>
         </Swipeable>
       </div>
-      <LiveBanner live={live} />
+      {/* <LiveBanner live={live} /> */}
     </main>
   );
 }
