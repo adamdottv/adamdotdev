@@ -4,7 +4,7 @@ import { bus } from "./bus";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
 // import { webhook } from "./stripe";
-import { service } from "./cluster";
+// import { service } from "./cluster";
 import { table } from "./table";
 
 const api = new sst.aws.Function("Api", {
@@ -26,7 +26,7 @@ const api = new sst.aws.Function("Api", {
     secret.Spotify.AccessToken,
     // webhook,
     realtime,
-    service,
+    // service,
   ],
   permissions: [
     { actions: ["iot:*"], resources: ["*"] },
