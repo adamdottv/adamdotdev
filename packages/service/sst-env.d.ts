@@ -6,9 +6,18 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
+    "Api": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
     "ApiKey": {
       "type": "sst.sst.Secret"
       "value": string
+    }
+    "ApiRouter": {
+      "type": "sst.aws.Router"
+      "url": string
     }
     "Bus": {
       "arn": string
@@ -29,6 +38,7 @@ declare module "sst" {
       "type": "sst.aws.Realtime"
     }
     "Service": {
+      "service": string
       "type": "sst.aws.Service"
       "url": string
     }
@@ -85,6 +95,10 @@ declare module "sst" {
     }
     "VpcV2": {
       "type": "sst.aws.Vpc"
+    }
+    "WebApp": {
+      "type": "sst.aws.Nextjs"
+      "url": string
     }
   }
 }
