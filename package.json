@@ -10,7 +10,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "sst": "^0.1.1"
+    "sst": "3.3.35"
   },
   "devDependencies": {
     "@tsconfig/node20": "20.1.4",

@@ -1,15 +1,16 @@
 import { bus } from "./bus";
 import { service } from "./cluster";
-import { database } from "./database";
+// import { database } from "./database";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
 import { table } from "./table";
 
 bus.subscribe(
+  "TwitchSubscription",
   {
     handler: "packages/functions/src/events/twitch.handler",
     link: [
-      database,
+      // database,
       table,
       realtime,
       secret.ObsPassword,
@@ -30,10 +31,11 @@ bus.subscribe(
 );
 
 bus.subscribe(
+  "ObsSubscription",
   {
     handler: "packages/functions/src/events/obs.handler",
     link: [
-      database,
+      // database,
       table,
       realtime,
       secret.ObsPassword,
@@ -54,10 +56,11 @@ bus.subscribe(
 );
 
 bus.subscribe(
+  "SpotifySubscription",
   {
     handler: "packages/functions/src/events/spotify.handler",
     link: [
-      database,
+      // database,
       table,
       realtime,
       secret.ObsPassword,

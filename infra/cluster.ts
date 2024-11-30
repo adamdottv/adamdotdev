@@ -1,11 +1,14 @@
-import { database } from "./database";
+// import { database } from "./database";
 import { domain, zone } from "./dns";
 import { bus } from "./bus";
 import { secret } from "./secret";
 import { table } from "./table";
 
-export const vpc = new sst.aws.Vpc("Vpc");
-export const cluster = new sst.aws.Cluster("Cluster", { vpc });
+export const vpc = new sst.aws.Vpc("VpcV2");
+export const cluster = new sst.aws.Cluster("Cluster", {
+  vpc,
+  forceUpgrade: "v2",
+});
 
 const obsDomain = `obs.${domain}`;
 export const obsARecord = new aws.route53.Record("ObsARecord", {
@@ -23,7 +26,7 @@ export const service = cluster.addService("Service", {
   public: { ports: [{ listen: "80/http" }] },
   image: { dockerfile: "packages/service/Dockerfile" },
   link: [
-    database,
+    // database,
     table,
     secret.ApiKey,
     secret.ObsPassword,

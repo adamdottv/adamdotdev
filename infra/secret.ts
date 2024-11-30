@@ -1,15 +1,15 @@
-sst.Linkable.wrap(aws.secretsmanager.Secret, (secret) => ({
-  properties: {
-    id: secret.id,
-    arn: secret.arn,
-  },
-  with: [
-    sst.aws.permission({
-      actions: ["secretsmanager:*"],
-      resources: [secret.arn],
-    }),
-  ],
-}));
+// sst.Linkable.wrap(aws.secretsmanager.Secret, (secret) => ({
+//   properties: {
+//     id: secret.id,
+//     arn: secret.arn,
+//   },
+//   with: [
+//     sst.aws.permission({
+//       actions: ["secretsmanager:*"],
+//       resources: [secret.arn],
+//     }),
+//   ],
+// }));
 
 export const secret = {
   StaticIpAddress: new sst.Secret("StaticIpAddress"),
