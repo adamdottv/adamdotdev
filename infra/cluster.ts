@@ -22,21 +22,21 @@ const obsWebsocket = new sst.Resource("ObsWebsocket", {
   url: `ws://${obsDomain}:4455`,
 });
 
-// export const service = cluster.addService("Service", {
-//   public: { ports: [{ listen: "80/http" }] },
-//   image: { dockerfile: "packages/service/Dockerfile" },
-//   link: [
-//     // database,
-//     table,
-//     secret.ApiKey,
-//     secret.ObsPassword,
-//     ...Object.values(secret.Twitch),
-//     ...Object.values(secret.Spotify),
-//     bus,
-//     obsWebsocket,
-//   ],
-//   permissions: [
-//     { actions: ["events:*"], resources: ["*"] },
-//     { actions: ["secretsmanager:*"], resources: ["*"] },
-//   ],
-// });
+export const service = cluster.addService("Service", {
+  public: { ports: [{ listen: "80/http" }] },
+  image: { dockerfile: "packages/service/Dockerfile" },
+  link: [
+    // database,
+    table,
+    secret.ApiKey,
+    secret.ObsPassword,
+    ...Object.values(secret.Twitch),
+    ...Object.values(secret.Spotify),
+    bus,
+    obsWebsocket,
+  ],
+  permissions: [
+    { actions: ["events:*"], resources: ["*"] },
+    { actions: ["secretsmanager:*"], resources: ["*"] },
+  ],
+});

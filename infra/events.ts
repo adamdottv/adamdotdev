@@ -1,5 +1,5 @@
 import { bus } from "./bus";
-// import { service } from "./cluster";
+import { service } from "./cluster";
 // import { database } from "./database";
 import { realtime } from "./realtime";
 import { secret } from "./secret";
@@ -14,7 +14,7 @@ bus.subscribe(
       table,
       realtime,
       secret.ObsPassword,
-      // service,
+      service,
       ...Object.values(secret.Twitch),
       ...Object.values(secret.Spotify),
     ],
@@ -39,7 +39,7 @@ bus.subscribe(
       table,
       realtime,
       secret.ObsPassword,
-      // service,
+      service,
       ...Object.values(secret.Twitch),
       ...Object.values(secret.Spotify),
     ],
