@@ -1,6 +1,6 @@
 import { domain } from "./dns";
 
-sst.linkable(stripe.WebhookEndpoint, function (endpoint) {
+sst.Linkable.wrap(stripe.WebhookEndpoint, function (endpoint) {
   return {
     properties: {
       id: endpoint.id,

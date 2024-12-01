@@ -18,8 +18,10 @@ export const obsARecord = new aws.route53.Record("ObsARecord", {
   ttl: 300,
   records: $resolve([secret.StaticIpAddress.value]).apply((records) => records),
 });
-const obsWebsocket = new sst.Resource("ObsWebsocket", {
-  url: `ws://${obsDomain}:4455`,
+const obsWebsocket = new sst.Linkable("ObsWebsocket", {
+  properties: {
+    url: `ws://${obsDomain}:4455`,
+  },
 });
 
 export const service = cluster.addService("Service", {

@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@types/luxon": "3.4.2",
+    "@types/object-hash": "^3.0.6",
     "@types/uuid": "^10.0.0"
   },
   "dependencies": {

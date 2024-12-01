@@ -29,7 +29,7 @@ declare module "sst" {
       "value": string
     }
     "ObsWebsocket": {
-      "type": "sst.sst.Resource"
+      "type": "sst.sst.Linkable"
       "url": string
     }
     "Realtime": {

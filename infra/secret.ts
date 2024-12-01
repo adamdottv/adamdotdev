@@ -3,7 +3,7 @@ sst.Linkable.wrap(aws.secretsmanager.Secret, (secret) => ({
     id: secret.id,
     arn: secret.arn,
   },
-  with: [
+  include: [
     sst.aws.permission({
       actions: ["secretsmanager:*"],
       resources: [secret.arn],
